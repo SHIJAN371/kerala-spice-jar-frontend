@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel – Kerala Spice Jar</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            saffron: '#E8861A', turmeric: '#F5A623', terracotta: '#C4622D',
+            spicegreen: '#2D5016', cream: '#FDF6E3', parchment: '#F5E6C8', bark: '#7B4F2E', dark: '#1A0E00',
+          },
+          fontFamily: {
+            display: ['"Playfair Display"', 'serif'],
+            sans: ['"DM Sans"', 'sans-serif'],
+            mono: ['"Space Mono"', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { background: #0F172A; font-family: 'DM Sans', sans-serif; }
+    .sidebar { background: #1E293B; }
+    .card { background: #1E293B; border: 1px solid rgba(232,134,26,0.1); }
+    .stat-card { background: linear-gradient(135deg, #1E293B, #162032); }
+    .nav-link { transition: all 0.2s ease; border-left: 3px solid transparent; }
+    .nav-link.active, .nav-link:hover { background: rgba(232,134,26,0.1); border-left-color: #E8861A; color: #E8861A; }
+    .tab-btn { border-bottom: 2px solid transparent; transition: all 0.2s; }
+    .tab-btn.active { border-bottom-color: #E8861A; color: #E8861A; }
+    .badge-pending { background: #fef3c7; color: #92400e; }
+    .badge-confirmed { background: #d1fae5; color: #065f46; }
+    .badge-cancelled { background: #fee2e2; color: #991b1b; }
+    .badge-delivered { background: #dbeafe; color: #1e40af; }
+    .badge-processing { background: #ede9fe; color: #5b21b6; }
+    .badge-shipped { background: #e0f2fe; color: #0369a1; }
+    input, select, textarea { background: #0F172A !important; border-color: rgba(232,134,26,0.2) !important; color: white !important; }
+    input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.3) !important; }
+    input:focus, select:focus, textarea:focus { outline: none !important; border-color: #E8861A !important; }
+    .table-row:hover { background: rgba(232,134,26,0.04); }
+    ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: #0F172A; } ::-webkit-scrollbar-thumb { background: #E8861A; border-radius: 3px; }
+    #login-screen { background: radial-gradient(ellipse at center, #1A0E00, #0F172A); }
+    .toggle-switch { position: relative; width: 44px; height: 24px; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; inset: 0; background: #334155; border-radius: 24px; cursor: pointer; transition: .3s; }
+    .toggle-slider:before { content: ''; position: absolute; height: 18px; width: 18px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: .3s; }
+    input:checked + .toggle-slider { background: #E8861A; }
+    input:checked + .toggle-slider:before { transform: translateX(20px); }
+    #toast { transform: translateY(100px); opacity: 0; transition: all 0.4s; }
+    #toast.show { transform: translateY(0); opacity: 1; }
+  </style>
+</head>
+<body class="min-h-screen text-gray-200">
+
+<!-- ══ LOGIN SCREEN ══════════════════════════ -->
+<div id="login-screen" class="fixed inset-0 z-[999] flex items-center justify-center">
+  <div class="w-full max-w-sm mx-4">
+    <div class="text-center mb-8">
+      <div class="w-16 h-16 rounded-full bg-gradient-to-br from-saffron to-terracotta flex items-center justify-center mx-auto mb-4 shadow-2xl shadow-saffron/30">
+        <span class="text-3xl">🌶️</span>
+      </div>
+      <h1 class="font-display text-3xl text-white mb-1">Kerala Spice Jar</h1>
+      <p class="text-gray-400 text-sm font-sans">Admin Panel</p>
+    </div>
+    <div class="bg-slate-800 rounded-3xl p-8 border border-saffron/20 shadow-2xl">
+      <form id="login-form" class="space-y-4">
+        <div>
+          <label class="font-mono text-xs text-saffron uppercase tracking-wider block mb-1.5">Username</label>
+          <input type="text" id="login-username" placeholder="admin"
+            class="w-full border rounded-xl px-4 py-3 text-sm" />
+        </div>
+        <div>
+          <label class="font-mono text-xs text-saffron uppercase tracking-wider block mb-1.5">Password</label>
+          <div class="relative">
+            <input type="password" id="login-password" placeholder="••••••••"
+              class="w-full border rounded-xl px-4 py-3 pr-12 text-sm" />
+            <button type="button" id="toggle-pass" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-sm">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        <p id="login-error" class="text-red-400 text-sm font-sans hidden"></p>
+        <button type="submit"
+          class="w-full bg-saffron hover:bg-terracotta text-white font-sans font-medium py-3 rounded-xl transition-colors mt-2">
+          Sign In
+        </button>
+      </form>
+      <p class="text-center text-gray-500 text-xs mt-4 font-sans">Default: admin / spicejar@admin123</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MAIN APP ══════════════════════════════ -->
+<div id="app" class="hidden flex min-h-screen">
+
+  <!-- Sidebar -->
+  <aside class="sidebar w-64 shrink-0 flex flex-col min-h-screen sticky top-0 border-r border-white/5">
+    <!-- Brand -->
+    <div class="px-6 py-5 border-b border-white/5">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-saffron to-terracotta flex items-center justify-center">
+          <span class="text-xl">🌶️</span>
+        </div>
+        <div>
+          <div class="font-display text-white text-sm font-semibold leading-tight">Kerala Spice Jar</div>
+          <div class="font-mono text-saffron/60 text-xs">Admin Panel</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="flex-1 px-3 py-4 space-y-1">
+      <button class="nav-link active w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-300 text-sm font-sans" data-section="dashboard">
+        <i class="fas fa-chart-pie w-4 text-center"></i> Dashboard
+      </button>
+      <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-300 text-sm font-sans" data-section="products">
+        <i class="fas fa-jar w-4 text-center"></i> Products
+      </button>
+      <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-300 text-sm font-sans" data-section="orders">
+        <i class="fas fa-receipt w-4 text-center"></i> Orders
+        <span id="pending-badge" class="ml-auto bg-saffron text-white text-xs font-mono px-2 py-0.5 rounded-full hidden"></span>
+      </button>
+      <button class="nav-link w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-300 text-sm font-sans" data-section="settings">
+        <i class="fas fa-cog w-4 text-center"></i> Settings
+      </button>
+    </nav>
+
+    <!-- Bottom -->
+    <div class="px-4 py-4 border-t border-white/5">
+      <button id="logout-btn" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-400 hover:text-red-400 text-sm font-sans transition-colors">
+        <i class="fas fa-sign-out-alt w-4 text-center"></i> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 overflow-auto">
+
+    <!-- Top bar -->
+    <header class="sticky top-0 bg-slate-900/95 backdrop-blur border-b border-white/5 px-6 py-4 flex items-center justify-between z-50">
+      <div>
+        <h1 id="page-title" class="font-display text-xl text-white">Dashboard</h1>
+        <p class="text-gray-500 text-xs font-sans" id="page-sub">Overview & analytics</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="index.html" target="_blank" class="text-gray-400 hover:text-white text-sm font-sans border border-white/10 rounded-lg px-3 py-1.5 transition-colors">
+          <i class="fas fa-external-link-alt mr-1"></i> View Shop
+        </a>
+        <div class="w-8 h-8 rounded-full bg-saffron flex items-center justify-center text-white font-mono text-sm">A</div>
+      </div>
+    </header>
+
+    <div class="p-6">
+
+      <!-- ── DASHBOARD ── -->
+      <section id="section-dashboard">
+        <!-- Stat cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="stat-card card rounded-2xl p-5">
+            <div class="flex items-center justify-between mb-3">
+              <div class="font-mono text-xs text-gray-400 uppercase tracking-wider">Total Orders</div>
+              <div class="w-8 h-8 rounded-lg bg-saffron/10 flex items-center justify-center"><i class="fas fa-receipt text-saffron text-sm"></i></div>
+            </div>
+            <div class="font-display text-3xl text-white" id="stat-total-orders">—</div>
+            <div class="text-gray-500 text-xs font-sans mt-1" id="stat-today-orders">Today: —</div>
+          </div>
+          <div class="stat-card card rounded-2xl p-5">
+            <div class="flex items-center justify-between mb-3">
+              <div class="font-mono text-xs text-gray-400 uppercase tracking-wider">Revenue</div>
+              <div class="w-8 h-8 rounded-lg bg-turmeric/10 flex items-center justify-center"><i class="fas fa-rupee-sign text-turmeric text-sm"></i></div>
+            </div>
+            <div class="font-display text-3xl text-white" id="stat-revenue">—</div>
+            <div class="text-gray-500 text-xs font-sans mt-1" id="stat-today-revenue">Today: —</div>
+          </div>
+          <div class="stat-card card rounded-2xl p-5">
+            <div class="flex items-center justify-between mb-3">
+              <div class="font-mono text-xs text-gray-400 uppercase tracking-wider">Products</div>
+              <div class="w-8 h-8 rounded-lg bg-spicegreen/20 flex items-center justify-center"><i class="fas fa-jar text-green-400 text-sm"></i></div>
+            </div>
+            <div class="font-display text-3xl text-white" id="stat-products">—</div>
+            <div class="text-gray-500 text-xs font-sans mt-1" id="stat-instock">In stock: —</div>
+          </div>
+          <div class="stat-card card rounded-2xl p-5">
+            <div class="flex items-center justify-between mb-3">
+              <div class="font-mono text-xs text-gray-400 uppercase tracking-wider">This Month</div>
+              <div class="w-8 h-8 rounded-lg bg-terracotta/20 flex items-center justify-center"><i class="fas fa-calendar-alt text-terracotta text-sm"></i></div>
+            </div>
+            <div class="font-display text-3xl text-white" id="stat-month-orders">—</div>
+            <div class="text-gray-500 text-xs font-sans mt-1" id="stat-month-revenue">₹0</div>
+          </div>
+        </div>
+
+        <!-- Charts row -->
+        <div class="grid lg:grid-cols-3 gap-4 mb-6">
+          <!-- Revenue trend -->
+          <div class="card rounded-2xl p-5 lg:col-span-2">
+            <div class="flex items-center justify-between mb-4">
+              <div class="font-sans font-semibold text-white text-sm">Revenue — Last 7 Days</div>
+            </div>
+            <div id="revenue-chart" class="flex items-end gap-2 h-32">
+              <!-- bars rendered by JS -->
+            </div>
+            <div id="revenue-labels" class="flex gap-2 mt-1 text-xs text-gray-500 font-mono"></div>
+          </div>
+
+          <!-- Status donut -->
+          <div class="card rounded-2xl p-5">
+            <div class="font-sans font-semibold text-white text-sm mb-4">Order Status</div>
+            <div id="status-breakdown" class="space-y-2"></div>
+          </div>
+        </div>
+
+        <!-- Top products + Recent orders -->
+        <div class="grid lg:grid-cols-2 gap-4">
+          <div class="card rounded-2xl p-5">
+            <div class="font-sans font-semibold text-white text-sm mb-4">Top Products</div>
+            <div id="top-products" class="space-y-3"></div>
+          </div>
+          <div class="card rounded-2xl p-5">
+            <div class="font-sans font-semibold text-white text-sm mb-4">Recent Orders</div>
+            <div id="recent-orders-list" class="space-y-3"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── PRODUCTS ── -->
+      <section id="section-products" class="hidden">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+          <input type="text" id="product-search" placeholder="Search products…" class="border rounded-xl px-4 py-2.5 text-sm w-64" />
+          <button id="add-product-btn"
+            class="bg-saffron hover:bg-terracotta text-white font-sans text-sm px-5 py-2.5 rounded-xl flex items-center gap-2 transition-colors">
+            <i class="fas fa-plus"></i> Add Product
+          </button>
+        </div>
+
+        <div class="card rounded-2xl overflow-hidden">
+          <table class="w-full text-sm font-sans">
+            <thead>
+              <tr class="border-b border-white/5 text-gray-400 text-xs font-mono uppercase">
+                <th class="px-4 py-3 text-left">Product</th>
+                <th class="px-4 py-3 text-left hidden md:table-cell">Category</th>
+                <th class="px-4 py-3 text-left">Price</th>
+                <th class="px-4 py-3 text-left hidden lg:table-cell">Stock</th>
+                <th class="px-4 py-3 text-left">Status</th>
+                <th class="px-4 py-3 text-left">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="products-table-body"></tbody>
+          </table>
+          <div id="products-loading" class="py-12 text-center text-gray-500 font-sans text-sm">
+            <i class="fas fa-spinner fa-spin mr-2"></i> Loading products…
+          </div>
+        </div>
+      </section>
+
+      <!-- ── ORDERS ── -->
+      <section id="section-orders" class="hidden">
+        <!-- Filters -->
+        <div class="flex flex-wrap gap-3 mb-5">
+          <select id="order-status-filter" class="border rounded-xl px-3 py-2.5 text-sm">
+            <option value="">All Statuses</option>
+            <option>Pending</option><option>Confirmed</option><option>Processing</option>
+            <option>Shipped</option><option>Delivered</option><option>Cancelled</option>
+          </select>
+          <input type="text" id="order-search" placeholder="Search name, phone, order ID…" class="border rounded-xl px-4 py-2.5 text-sm w-64" />
+          <button id="refresh-orders" class="border border-white/10 text-gray-400 hover:text-white px-4 py-2.5 rounded-xl text-sm transition-colors">
+            <i class="fas fa-sync-alt mr-1"></i> Refresh
+          </button>
+        </div>
+
+        <div class="card rounded-2xl overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm font-sans min-w-[700px]">
+              <thead>
+                <tr class="border-b border-white/5 text-gray-400 text-xs font-mono uppercase">
+                  <th class="px-4 py-3 text-left">Order ID</th>
+                  <th class="px-4 py-3 text-left">Customer</th>
+                  <th class="px-4 py-3 text-left">Items</th>
+                  <th class="px-4 py-3 text-left">Total</th>
+                  <th class="px-4 py-3 text-left">Payment</th>
+                  <th class="px-4 py-3 text-left">Status</th>
+                  <th class="px-4 py-3 text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="orders-table-body"></tbody>
+            </table>
+          </div>
+          <div id="orders-loading" class="py-12 text-center text-gray-500 font-sans text-sm">
+            <i class="fas fa-spinner fa-spin mr-2"></i> Loading orders…
+          </div>
+        </div>
+      </section>
+
+      <!-- ── SETTINGS ── -->
+      <section id="section-settings" class="hidden max-w-xl">
+        <div class="card rounded-2xl p-6 mb-4">
+          <h3 class="font-display text-white text-lg mb-4">Change Password</h3>
+          <form id="change-pass-form" class="space-y-4">
+            <div>
+              <label class="font-mono text-xs text-saffron uppercase tracking-wider block mb-1.5">Current Password</label>
+              <input type="password" name="current" required class="w-full border rounded-xl px-4 py-3 text-sm" />
+            </div>
+            <div>
+              <label class="font-mono text-xs text-saffron uppercase tracking-wider block mb-1.5">New Password</label>
+              <input type="password" name="new" required minlength="8" class="w-full border rounded-xl px-4 py-3 text-sm" />
+            </div>
+            <button type="submit" class="bg-saffron hover:bg-terracotta text-white px-6 py-2.5 rounded-xl text-sm font-sans transition-colors">
+              Update Password
+            </button>
+          </form>
+        </div>
+
+        <div class="card rounded-2xl p-6">
+          <h3 class="font-display text-white text-lg mb-4">Store Settings</h3>
+          <div class="space-y-4 text-sm font-sans text-gray-300">
+            <div class="flex items-center justify-between py-2 border-b border-white/5">
+              <span>WhatsApp Number</span>
+              <input type="text" value="919876543210" class="border rounded-lg px-3 py-1.5 text-sm w-40 text-right" />
+            </div>
+            <div class="flex items-center justify-between py-2 border-b border-white/5">
+              <span>Free Delivery Above</span>
+              <input type="number" value="500" class="border rounded-lg px-3 py-1.5 text-sm w-24 text-right" />
+            </div>
+            <div class="flex items-center justify-between py-2 border-b border-white/5">
+              <span>Delivery Charge</span>
+              <input type="number" value="50" class="border rounded-lg px-3 py-1.5 text-sm w-24 text-right" />
+            </div>
+            <button class="bg-saffron hover:bg-terracotta text-white px-6 py-2.5 rounded-xl text-sm transition-colors">
+              Save Settings
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /p-6 -->
+  </main>
+</div><!-- /app -->
+
+
+<!-- ══ PRODUCT FORM MODAL ════════════════════ -->
+<div id="product-modal" class="fixed inset-0 z-[300] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" id="pm-overlay"></div>
+  <div class="relative z-10 bg-slate-900 border border-saffron/20 rounded-3xl w-full max-w-xl mx-4 overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto">
+    <div class="px-6 py-4 border-b border-white/5 flex items-center justify-between sticky top-0 bg-slate-900 z-10">
+      <h2 id="pm-title" class="font-display text-white text-lg">Add Product</h2>
+      <button id="pm-close" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+    </div>
+    <form id="product-form" class="p-6 space-y-4">
+      <input type="hidden" id="pm-id" />
+      <div class="grid grid-cols-2 gap-4">
+        <div class="col-span-2">
+          <label class="label">Product Name *</label>
+          <input type="text" name="name" required class="w-full border rounded-xl px-4 py-3 text-sm" />
+        </div>
+        <div>
+          <label class="label">Category *</label>
+          <select name="category" required class="w-full border rounded-xl px-4 py-3 text-sm">
+            <option value="">Select…</option>
+            <option>Pickles</option><option>Spice Mixes</option><option>Chutneys</option>
+            <option>Snacks</option><option>Sweets</option><option>Beverages</option><option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label class="label">Weight</label>
+          <input type="text" name="weight" placeholder="e.g. 250g" class="w-full border rounded-xl px-4 py-3 text-sm" />
+        </div>
+        <div>
+          <label class="label">Price (₹) *</label>
+          <input type="number" name="price" required min="0" class="w-full border rounded-xl px-4 py-3 text-sm" />
+        </div>
+        <div>
+          <label class="label">Original Price (₹)</label>
+          <input type="number" name="originalPrice" min="0" class="w-full border rounded-xl px-4 py-3 text-sm" />
+        </div>
+        <div class="col-span-2">
+          <label class="label">Short Description</label>
+          <input type="text" name="shortDescription" maxlength="200" placeholder="One-liner for product card" class="w-full border rounded-xl px-4 py-3 text-sm" />
+        </div>
+        <div class="col-span-2">
+          <label class="label">Full Description *</label>
+          <textarea name="description" required rows="3" class="w-full border rounded-xl px-4 py-3 text-sm resize-none"></textarea>
+        </div>
+        <div class="col-span-2">
+          <label class="label">Ingredients</label>
+          <input type="text" name="ingredients" class="w-full border rounded-xl px-4 py-3 text-sm" />
+        </div>
+        <div>
+          <label class="label">Shelf Life</label>
+          <input type="text" name="shelfLife" placeholder="e.g. 6 months" class="w-full border rounded-xl px-4 py-3 text-sm" />
+        </div>
+        <div>
+          <label class="label">Tags (comma-separated)</label>
+          <input type="text" name="tags" placeholder="pickle, mango, spicy" class="w-full border rounded-xl px-4 py-3 text-sm" />
+        </div>
+
+        <!-- Image upload -->
+        <div class="col-span-2">
+          <label class="label">Product Images</label>
+          <input type="file" name="images" accept="image/*" multiple
+            class="w-full border rounded-xl px-4 py-3 text-sm cursor-pointer file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:bg-saffron/20 file:text-saffron file:text-xs" />
+          <p class="text-gray-500 text-xs mt-1">Or paste image URL below:</p>
+          <input type="url" name="imageUrl" placeholder="https://…" class="w-full border rounded-xl px-4 py-3 text-sm mt-2" />
+        </div>
+
+        <!-- Toggles -->
+        <div class="flex items-center justify-between">
+          <label class="font-mono text-xs text-gray-300 uppercase">In Stock</label>
+          <label class="toggle-switch"><input type="checkbox" name="inStock" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="flex items-center justify-between">
+          <label class="font-mono text-xs text-gray-300 uppercase">Featured</label>
+          <label class="toggle-switch"><input type="checkbox" name="isFeatured" /><span class="toggle-slider"></span></label>
+        </div>
+        <div class="flex items-center justify-between">
+          <label class="font-mono text-xs text-gray-300 uppercase">Vegetarian</label>
+          <label class="toggle-switch"><input type="checkbox" name="isVeg" checked /><span class="toggle-slider"></span></label>
+        </div>
+        <div>
+          <label class="label">Stock Qty</label>
+          <input type="number" name="stockQuantity" value="100" min="0" class="w-full border rounded-xl px-4 py-3 text-sm" />
+        </div>
+      </div>
+
+      <div class="flex gap-3 pt-2">
+        <button type="submit" id="pm-submit"
+          class="flex-1 bg-saffron hover:bg-terracotta text-white font-sans py-3 rounded-xl text-sm transition-colors">
+          Save Product
+        </button>
+        <button type="button" id="pm-cancel"
+          class="px-6 border border-white/10 text-gray-400 hover:text-white rounded-xl text-sm transition-colors">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<!-- ══ ORDER DETAIL MODAL ════════════════════ -->
+<div id="order-modal" class="fixed inset-0 z-[300] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" id="om-overlay"></div>
+  <div class="relative z-10 bg-slate-900 border border-saffron/20 rounded-3xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto">
+    <div class="px-6 py-4 border-b border-white/5 flex items-center justify-between sticky top-0 bg-slate-900 z-10">
+      <h2 class="font-display text-white text-lg">Order Details</h2>
+      <button id="om-close" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+    </div>
+    <div id="order-detail-content" class="p-6"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-6 right-6 z-[999] bg-slate-800 border border-white/10 text-white font-sans text-sm px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-2">
+  <span id="toast-icon">✅</span> <span id="toast-msg"></span>
+</div>
+
+<style>
+  .label { display: block; font-family: 'Space Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: #E8861A; margin-bottom: 4px; }
+</style>
+
+<script>
+// ═════════════════════════════════════════════
+// CONFIG
+// ═════════════════════════════════════════════
+const API = 'http://localhost:5000/api';
+let TOKEN = localStorage.getItem('ksj_admin_token');
+let allProducts = [], allOrders = [];
+let currentSection = 'dashboard';
+
+// ═════════════════════════════════════════════
+// UTIL
+// ═════════════════════════════════════════════
+const fmt = n => '₹' + Number(n).toLocaleString('en-IN');
+const showToast = (msg, icon = '✅', ms = 2500) => {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  document.getElementById('toast-icon').textContent = icon;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), ms);
+};
+
+const statusBadge = (s) => {
+  const cls = {
+    Pending: 'badge-pending', Confirmed: 'badge-confirmed', Cancelled: 'badge-cancelled',
+    Delivered: 'badge-delivered', Processing: 'badge-processing', Shipped: 'badge-shipped',
+  }[s] || 'bg-gray-700 text-gray-300';
+  return `<span class="${cls} font-mono text-xs px-2 py-0.5 rounded-full">${s}</span>`;
+};
+
+const apiHeaders = () => ({
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${TOKEN}`,
+});
+
+// ═════════════════════════════════════════════
+// AUTH
+// ═════════════════════════════════════════════
+const showApp = () => {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('app').classList.add('flex');
+  loadDashboard();
+};
+
+const requireAuth = () => {
+  if (!TOKEN) return;
+  // Verify token
+  fetch(`${API}/auth/verify`, { headers: apiHeaders() })
+    .then(r => r.json())
+    .then(d => { if (d.success) showApp(); else { TOKEN = null; localStorage.removeItem('ksj_admin_token'); } })
+    .catch(() => {});
+};
+
+document.getElementById('login-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const u = document.getElementById('login-username').value;
+  const p = document.getElementById('login-password').value;
+  const err = document.getElementById('login-error');
+
+  try {
+    const res = await fetch(`${API}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: u, password: p }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      TOKEN = data.token;
+      localStorage.setItem('ksj_admin_token', TOKEN);
+      err.classList.add('hidden');
+      showApp();
+    } else {
+      err.textContent = data.message || 'Invalid credentials.';
+      err.classList.remove('hidden');
+    }
+  } catch {
+    // Demo login fallback
+    if (u === 'admin' && p === 'spicejar@admin123') {
+      TOKEN = 'demo_token_' + Date.now();
+      localStorage.setItem('ksj_admin_token', TOKEN);
+      showApp();
+    } else {
+      err.textContent = 'Cannot connect to server. Use admin / spicejar@admin123 for demo.';
+      err.classList.remove('hidden');
+    }
+  }
+});
+
+document.getElementById('toggle-pass').onclick = () => {
+  const inp = document.getElementById('login-password');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+};
+
+document.getElementById('logout-btn').onclick = () => {
+  TOKEN = null;
+  localStorage.removeItem('ksj_admin_token');
+  location.reload();
+};
+
+// ═════════════════════════════════════════════
+// NAVIGATION
+// ═════════════════════════════════════════════
+const sections = ['dashboard', 'products', 'orders', 'settings'];
+const titles = { dashboard: ['Dashboard', 'Overview & analytics'], products: ['Products', 'Manage your product catalog'], orders: ['Orders', 'View and update customer orders'], settings: ['Settings', 'Configure your store'] };
+
+document.querySelectorAll('.nav-link').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const s = btn.dataset.section;
+    currentSection = s;
+    document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    sections.forEach(id => document.getElementById(`section-${id}`).classList.add('hidden'));
+    document.getElementById(`section-${s}`).classList.remove('hidden');
+    const [t, sub] = titles[s];
+    document.getElementById('page-title').textContent = t;
+    document.getElementById('page-sub').textContent = sub;
+    if (s === 'products') loadProducts();
+    if (s === 'orders') loadOrders();
+  });
+});
+
+// ═════════════════════════════════════════════
+// DASHBOARD
+// ═════════════════════════════════════════════
+const DEMO_ANALYTICS = {
+  totalOrders: 47, todayOrders: 3, monthOrders: 18,
+  totalRevenue: 52800, todayRevenue: 1240, monthRevenue: 21600,
+  statusBreakdown: [
+    { _id: 'Pending', count: 5 }, { _id: 'Confirmed', count: 12 },
+    { _id: 'Delivered', count: 28 }, { _id: 'Cancelled', count: 2 },
+  ],
+  topProducts: [
+    { _id: 'Banana Chips (Nendran)', count: 68, revenue: 7480 },
+    { _id: 'Mango Pickle (Avakaya)', count: 45, revenue: 8100 },
+    { _id: 'Kerala Fish Curry Masala', count: 38, revenue: 4560 },
+    { _id: 'Coconut Chutney Powder', count: 34, revenue: 3230 },
+  ],
+  revenueTrend: [
+    { date: 'Mon 7', revenue: 1200, orders: 3 }, { date: 'Tue 8', revenue: 2100, orders: 6 },
+    { date: 'Wed 9', revenue: 800, orders: 2 }, { date: 'Thu 10', revenue: 3400, orders: 9 },
+    { date: 'Fri 11', revenue: 1900, orders: 5 }, { date: 'Sat 12', revenue: 4200, orders: 11 },
+    { date: 'Sun 13', revenue: 1240, orders: 3 },
+  ],
+};
+
+async function loadDashboard() {
+  let stats = DEMO_ANALYTICS;
+  try {
+    const r = await fetch(`${API}/orders/analytics`, { headers: apiHeaders() });
+    const d = await r.json();
+    if (d.success) stats = d.data;
+  } catch {}
+
+  document.getElementById('stat-total-orders').textContent = stats.totalOrders;
+  document.getElementById('stat-today-orders').textContent = `Today: ${stats.todayOrders}`;
+  document.getElementById('stat-revenue').textContent = fmt(stats.totalRevenue);
+  document.getElementById('stat-today-revenue').textContent = `Today: ${fmt(stats.todayRevenue)}`;
+  document.getElementById('stat-month-orders').textContent = stats.monthOrders;
+  document.getElementById('stat-month-revenue').textContent = fmt(stats.monthRevenue);
+
+  // Products count
+  try {
+    const r2 = await fetch(`${API}/products?limit=100`, { headers: apiHeaders() });
+    const d2 = await r2.json();
+    if (d2.success) {
+      document.getElementById('stat-products').textContent = d2.data.length;
+      document.getElementById('stat-instock').textContent = `In stock: ${d2.data.filter(p => p.inStock).length}`;
+    }
+  } catch { document.getElementById('stat-products').textContent = '6'; document.getElementById('stat-instock').textContent = 'In stock: 5'; }
+
+  // Pending badge
+  const pending = stats.statusBreakdown?.find(s => s._id === 'Pending')?.count || 0;
+  const badge = document.getElementById('pending-badge');
+  if (pending > 0) { badge.textContent = pending; badge.classList.remove('hidden'); }
+
+  // Revenue chart
+  const trend = stats.revenueTrend || [];
+  const maxRev = Math.max(...trend.map(d => d.revenue), 1);
+  document.getElementById('revenue-chart').innerHTML = trend.map(d => `
+    <div class="flex-1 flex flex-col items-center gap-1">
+      <div class="text-xs text-gray-400 font-mono">${fmt(d.revenue)}</div>
+      <div class="w-full rounded-t-lg bg-gradient-to-t from-saffron to-turmeric opacity-80 hover:opacity-100 transition-opacity"
+        style="height:${Math.round((d.revenue/maxRev)*100)}px; min-height:4px;"></div>
+    </div>
+  `).join('');
+  document.getElementById('revenue-labels').innerHTML = trend.map(d => `<div class="flex-1 text-center truncate">${d.date}</div>`).join('');
+
+  // Status breakdown
+  const statusColors = { Pending: '#F5A623', Confirmed: '#10B981', Delivered: '#3B82F6', Cancelled: '#EF4444', Processing: '#8B5CF6', Shipped: '#06B6D4' };
+  document.getElementById('status-breakdown').innerHTML = (stats.statusBreakdown || []).map(s => `
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-2.5 h-2.5 rounded-full" style="background:${statusColors[s._id]||'#6B7280'}"></div>
+        <span class="font-sans text-sm text-gray-300">${s._id}</span>
+      </div>
+      <span class="font-mono text-sm text-white">${s.count}</span>
+    </div>
+  `).join('');
+
+  // Top products
+  document.getElementById('top-products').innerHTML = (stats.topProducts || []).map((p, i) => `
+    <div class="flex items-center gap-3">
+      <div class="w-6 h-6 rounded-full bg-saffron/20 text-saffron font-mono text-xs flex items-center justify-center">${i+1}</div>
+      <div class="flex-1 min-w-0">
+        <div class="font-sans text-sm text-white truncate">${p._id}</div>
+        <div class="font-mono text-xs text-gray-500">${p.count} units sold</div>
+      </div>
+      <div class="font-mono text-sm text-saffron">${fmt(p.revenue)}</div>
+    </div>
+  `).join('');
+
+  // Recent orders (fetch)
+  try {
+    const r3 = await fetch(`${API}/orders?limit=5&sort=createdAt&order=desc`, { headers: apiHeaders() });
+    const d3 = await r3.json();
+    if (d3.success) renderRecentOrders(d3.data);
+  } catch { renderRecentOrders([]); }
+}
+
+function renderRecentOrders(orders) {
+  document.getElementById('recent-orders-list').innerHTML = orders.length === 0
+    ? '<p class="text-gray-500 text-sm font-sans">No orders yet.</p>'
+    : orders.map(o => `
+      <div class="flex items-center justify-between py-2 border-b border-white/5 last:border-0">
+        <div>
+          <div class="font-mono text-xs text-saffron">${o.orderId}</div>
+          <div class="font-sans text-sm text-white">${o.customer?.name}</div>
+        </div>
+        <div class="text-right">
+          <div class="font-mono text-sm text-white">${fmt(o.total)}</div>
+          ${statusBadge(o.status)}
+        </div>
+      </div>
+    `).join('');
+}
+
+// ═════════════════════════════════════════════
+// PRODUCTS
+// ═════════════════════════════════════════════
+const DEMO_PRODUCTS = [
+  { _id:'1', name:'Mango Pickle (Avakaya)', category:'Pickles', price:180, originalPrice:220, inStock:true, isFeatured:true, weight:'250g', description:'Signature Andhra-style raw mango pickle.', shortDescription:'Tangy raw mango pickle', shelfLife:'6 months', isVeg:true, ingredients:'Raw Mango, Mustard Seeds, Red Chilli', tags:['mango','pickle'], image:'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=200&q=60' },
+  { _id:'2', name:'Kerala Fish Curry Masala', category:'Spice Mixes', price:120, originalPrice:150, inStock:true, isFeatured:true, weight:'100g', description:'Balanced blend of sun-dried Kerala spices.', shortDescription:'Authentic Malabar fish curry blend', shelfLife:'12 months', isVeg:true, ingredients:'Coriander, Black Pepper, Turmeric', tags:['masala','kerala'], image:'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=200&q=60' },
+  { _id:'3', name:'Banana Chips (Nendran)', category:'Snacks', price:110, originalPrice:130, inStock:true, isFeatured:true, weight:'200g', description:'Nendran bananas fried in coconut oil.', shortDescription:'Crispy Nendran chips in coconut oil', shelfLife:'45 days', isVeg:true, ingredients:'Nendran Banana, Coconut Oil, Rock Salt', tags:['banana','chips'], image:'https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=200&q=60' },
+  { _id:'4', name:'Coconut Chutney Powder', category:'Chutneys', price:95, inStock:true, isFeatured:true, weight:'150g', description:'Versatile coconut chutney powder.', shortDescription:'Instant chutney powder', shelfLife:'3 months', isVeg:true, ingredients:'Coconut, Urad Dal, Red Chilli', tags:['coconut','chutney'], image:'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=200&q=60' },
+  { _id:'5', name:'Mixed Vegetable Pickle', category:'Pickles', price:160, inStock:false, isFeatured:false, weight:'300g', description:'Colourful medley of carrots, raw mango, and green chilli.', shortDescription:'Vibrant mixed veggie pickle', shelfLife:'6 months', isVeg:true, ingredients:'Carrot, Mango, Green Chilli, Salt', tags:['pickle','veg'], image:'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=200&q=60' },
+  { _id:'6', name:'Kerala Garam Masala', category:'Spice Mixes', price:140, inStock:true, isFeatured:false, weight:'100g', description:'Fragrant whole-spice blend.', shortDescription:'Aromatic Kerala-style garam masala', shelfLife:'12 months', isVeg:true, ingredients:'Cardamom, Star Anise, Pepper, Cloves', tags:['masala','garam'], image:'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=200&q=60' },
+];
+
+async function loadProducts() {
+  document.getElementById('products-loading').style.display = 'block';
+  try {
+    const r = await fetch(`${API}/products?limit=100`, { headers: apiHeaders() });
+    const d = await r.json();
+    allProducts = d.success ? d.data : DEMO_PRODUCTS;
+  } catch { allProducts = DEMO_PRODUCTS; }
+  renderProductsTable(allProducts);
+  document.getElementById('products-loading').style.display = 'none';
+}
+
+function renderProductsTable(products) {
+  const tbody = document.getElementById('products-table-body');
+  if (products.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-gray-500 font-sans text-sm">No products found.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = products.map(p => `
+    <tr class="table-row border-b border-white/5 transition-colors">
+      <td class="px-4 py-3">
+        <div class="flex items-center gap-3">
+          <img src="${p.image}" alt="" class="w-10 h-10 rounded-lg object-cover shrink-0" onerror="this.src='https://via.placeholder.com/40?text=🌶️'" />
+          <div>
+            <div class="font-sans text-sm text-white">${p.name}</div>
+            <div class="font-mono text-xs text-gray-500">${p.weight}</div>
+          </div>
+        </div>
+      </td>
+      <td class="px-4 py-3 hidden md:table-cell">
+        <span class="font-mono text-xs text-saffron/80">${p.category}</span>
+      </td>
+      <td class="px-4 py-3">
+        <div class="font-mono text-sm text-white">${fmt(p.price)}</div>
+        ${p.originalPrice ? `<div class="font-mono text-xs text-gray-500 line-through">${fmt(p.originalPrice)}</div>` : ''}
+      </td>
+      <td class="px-4 py-3 hidden lg:table-cell">
+        <label class="toggle-switch">
+          <input type="checkbox" ${p.inStock ? 'checked' : ''} onchange="toggleStock('${p._id}', this.checked)" />
+          <span class="toggle-slider"></span>
+        </label>
+      </td>
+      <td class="px-4 py-3">
+        ${p.isFeatured ? '<span class="font-mono text-xs bg-saffron/20 text-saffron px-2 py-0.5 rounded-full">Featured</span>' : ''}
+        ${!p.inStock ? '<span class="font-mono text-xs bg-red-500/10 text-red-400 px-2 py-0.5 rounded-full">Out of Stock</span>' : ''}
+      </td>
+      <td class="px-4 py-3">
+        <div class="flex items-center gap-2">
+          <button onclick="editProduct('${p._id}')" class="text-gray-400 hover:text-saffron text-sm transition-colors" title="Edit"><i class="fas fa-edit"></i></button>
+          <button onclick="deleteProduct('${p._id}', '${p.name}')" class="text-gray-400 hover:text-red-400 text-sm transition-colors" title="Delete"><i class="fas fa-trash-alt"></i></button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function toggleStock(id, value) {
+  try {
+    await fetch(`${API}/products/${id}/stock`, {
+      method: 'PATCH',
+      headers: apiHeaders(),
+      body: JSON.stringify({ inStock: value }),
+    });
+    showToast(`Stock updated`, '✅');
+  } catch { showToast('Failed to update stock', '❌'); }
+}
+
+async function deleteProduct(id, name) {
+  if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+  try {
+    const r = await fetch(`${API}/products/${id}`, { method: 'DELETE', headers: apiHeaders() });
+    const d = await r.json();
+    if (d.success) { showToast('Product deleted', '🗑️'); loadProducts(); }
+    else showToast(d.message, '❌');
+  } catch {
+    allProducts = allProducts.filter(p => p._id !== id);
+    renderProductsTable(allProducts);
+    showToast('Product removed (demo)', '🗑️');
+  }
+}
+
+// Product search filter
+document.getElementById('product-search').addEventListener('input', (e) => {
+  const q = e.target.value.toLowerCase();
+  renderProductsTable(allProducts.filter(p => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q)));
+});
+
+// Product form modal
+const openPM = () => {
+  document.getElementById('product-modal').classList.remove('opacity-0', 'pointer-events-none');
+};
+const closePM = () => {
+  document.getElementById('product-modal').classList.add('opacity-0', 'pointer-events-none');
+  document.getElementById('product-form').reset();
+  document.getElementById('pm-id').value = '';
+};
+
+document.getElementById('add-product-btn').onclick = () => {
+  document.getElementById('pm-title').textContent = 'Add Product';
+  document.getElementById('pm-id').value = '';
+  document.getElementById('product-form').reset();
+  openPM();
+};
+document.getElementById('pm-close').onclick = closePM;
+document.getElementById('pm-cancel').onclick = closePM;
+document.getElementById('pm-overlay').onclick = closePM;
+
+function editProduct(id) {
+  const p = allProducts.find(x => x._id === id);
+  if (!p) return;
+  document.getElementById('pm-title').textContent = 'Edit Product';
+  document.getElementById('pm-id').value = p._id;
+  const form = document.getElementById('product-form');
+  form.name.value = p.name || '';
+  form.category.value = p.category || '';
+  form.weight.value = p.weight || '';
+  form.price.value = p.price || '';
+  form.originalPrice.value = p.originalPrice || '';
+  form.shortDescription.value = p.shortDescription || '';
+  form.description.value = p.description || '';
+  form.ingredients.value = p.ingredients || '';
+  form.shelfLife.value = p.shelfLife || '';
+  form.tags.value = (p.tags || []).join(', ');
+  form.inStock.checked = p.inStock !== false;
+  form.isFeatured.checked = p.isFeatured === true;
+  form.isVeg.checked = p.isVeg !== false;
+  form.stockQuantity.value = p.stockQuantity || 100;
+  form.imageUrl.value = p.image || '';
+  openPM();
+}
+
+document.getElementById('product-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const id = document.getElementById('pm-id').value;
+  const fd = new FormData(e.target);
+
+  const btn = document.getElementById('pm-submit');
+  btn.disabled = true; btn.textContent = 'Saving…';
+
+  try {
+    const url = id ? `${API}/products/${id}` : `${API}/products`;
+    const method = id ? 'PUT' : 'POST';
+    const res = await fetch(url, { method, headers: { 'Authorization': `Bearer ${TOKEN}` }, body: fd });
+    const d = await res.json();
+    if (d.success) {
+      showToast(id ? 'Product updated!' : 'Product added!', '✅');
+      closePM(); loadProducts();
+    } else showToast(d.message, '❌');
+  } catch {
+    // Demo fallback
+    const obj = Object.fromEntries(fd.entries());
+    if (id) {
+      const idx = allProducts.findIndex(p => p._id === id);
+      if (idx > -1) allProducts[idx] = { ...allProducts[idx], ...obj, price: Number(obj.price) };
+    } else {
+      allProducts.unshift({ ...obj, _id: Date.now().toString(), price: Number(obj.price), inStock: true, isFeatured: false });
+    }
+    renderProductsTable(allProducts);
+    showToast(id ? 'Product updated (demo)!' : 'Product added (demo)!', '✅');
+    closePM();
+  }
+
+  btn.disabled = false; btn.textContent = 'Save Product';
+});
+
+// ═════════════════════════════════════════════
+// ORDERS
+// ═════════════════════════════════════════════
+const DEMO_ORDERS = [
+  { _id:'o1', orderId:'KSJ-ABC123', customer:{name:'Priya Menon', phone:'9876543210', address:'12 MG Road, Kottayam'}, items:[{productName:'Mango Pickle',quantity:2,price:180,subtotal:360},{productName:'Banana Chips',quantity:1,price:110,subtotal:110}], subtotal:470, deliveryCharge:50, total:520, paymentMethod:'COD', paymentStatus:'Pending', status:'Pending', createdAt:new Date().toISOString() },
+  { _id:'o2', orderId:'KSJ-DEF456', customer:{name:'Akhil Krishnan', phone:'9988776655', address:'45 Beach Road, Alleppey'}, items:[{productName:'Kerala Fish Curry Masala',quantity:3,price:120,subtotal:360}], subtotal:360, deliveryCharge:0, total:360, paymentMethod:'UPI', paymentStatus:'Paid', status:'Confirmed', createdAt:new Date(Date.now()-86400000).toISOString() },
+  { _id:'o3', orderId:'KSJ-GHI789', customer:{name:'Suma Thomas', phone:'9765432100', address:'7 Garden Lane, Thrissur'}, items:[{productName:'Coconut Chutney Powder',quantity:2,price:95,subtotal:190},{productName:'Sambar Powder',quantity:1,price:130,subtotal:130}], subtotal:320, deliveryCharge:50, total:370, paymentMethod:'Razorpay', paymentStatus:'Paid', status:'Delivered', createdAt:new Date(Date.now()-172800000).toISOString() },
+];
+
+async function loadOrders() {
+  document.getElementById('orders-loading').style.display = 'block';
+  const status = document.getElementById('order-status-filter').value;
+  const search = document.getElementById('order-search').value;
+  let url = `${API}/orders?limit=50&sort=createdAt&order=desc`;
+  if (status) url += `&status=${status}`;
+  if (search) url += `&search=${encodeURIComponent(search)}`;
+
+  try {
+    const r = await fetch(url, { headers: apiHeaders() });
+    const d = await r.json();
+    allOrders = d.success ? d.data : DEMO_ORDERS;
+  } catch { allOrders = DEMO_ORDERS; }
+
+  renderOrdersTable(allOrders);
+  document.getElementById('orders-loading').style.display = 'none';
+}
+
+function renderOrdersTable(orders) {
+  const tbody = document.getElementById('orders-table-body');
+  if (orders.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-gray-500 font-sans text-sm">No orders found.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = orders.map(o => `
+    <tr class="table-row border-b border-white/5">
+      <td class="px-4 py-3">
+        <div class="font-mono text-xs text-saffron">${o.orderId}</div>
+        <div class="font-sans text-xs text-gray-500">${new Date(o.createdAt).toLocaleDateString('en-IN')}</div>
+      </td>
+      <td class="px-4 py-3">
+        <div class="font-sans text-sm text-white">${o.customer?.name}</div>
+        <div class="font-mono text-xs text-gray-500">${o.customer?.phone}</div>
+      </td>
+      <td class="px-4 py-3">
+        <div class="font-sans text-sm text-gray-300">${(o.items||[]).length} item${o.items?.length !== 1 ? 's' : ''}</div>
+        <div class="font-mono text-xs text-gray-500">${(o.items||[]).map(i => i.productName).join(', ').substring(0,30)}…</div>
+      </td>
+      <td class="px-4 py-3 font-mono text-sm text-white">${fmt(o.total)}</td>
+      <td class="px-4 py-3">
+        <div class="font-mono text-xs text-gray-400">${o.paymentMethod}</div>
+        <span class="font-mono text-xs ${o.paymentStatus === 'Paid' ? 'text-green-400' : 'text-yellow-400'}">${o.paymentStatus}</span>
+      </td>
+      <td class="px-4 py-3">${statusBadge(o.status)}</td>
+      <td class="px-4 py-3">
+        <div class="flex items-center gap-2">
+          <button onclick="viewOrder('${o._id}')" class="text-gray-400 hover:text-saffron text-sm" title="View"><i class="fas fa-eye"></i></button>
+          <select class="bg-transparent border border-white/10 rounded-lg text-xs font-mono text-gray-300 px-2 py-1 cursor-pointer"
+            onchange="updateOrderStatus('${o._id}', this.value)" title="Update status">
+            <option value="">Status…</option>
+            <option>Pending</option><option>Confirmed</option><option>Processing</option>
+            <option>Shipped</option><option>Delivered</option><option>Cancelled</option>
+          </select>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function updateOrderStatus(id, status) {
+  if (!status) return;
+  try {
+    const r = await fetch(`${API}/orders/${id}/status`, {
+      method: 'PATCH', headers: apiHeaders(), body: JSON.stringify({ status }),
+    });
+    const d = await r.json();
+    if (d.success) { showToast(`Order updated to ${status}`, '✅'); loadOrders(); }
+    else showToast(d.message, '❌');
+  } catch {
+    const o = allOrders.find(x => x._id === id);
+    if (o) { o.status = status; renderOrdersTable(allOrders); }
+    showToast(`Status updated to ${status} (demo)`, '✅');
+  }
+}
+
+function viewOrder(id) {
+  const o = allOrders.find(x => x._id === id);
+  if (!o) return;
+  document.getElementById('order-detail-content').innerHTML = `
+    <div class="space-y-4 font-sans text-sm">
+      <div class="flex items-center justify-between">
+        <div class="font-mono text-saffron">${o.orderId}</div>
+        ${statusBadge(o.status)}
+      </div>
+      <div class="bg-slate-800 rounded-2xl p-4 space-y-1">
+        <div class="font-mono text-xs text-gray-400 uppercase mb-2">Customer</div>
+        <div class="text-white font-medium">${o.customer?.name}</div>
+        <div class="text-gray-400">${o.customer?.phone}</div>
+        ${o.customer?.email ? `<div class="text-gray-400">${o.customer.email}</div>` : ''}
+        ${o.customer?.address ? `<div class="text-gray-400">${o.customer.address}, ${o.customer.city || ''} ${o.customer.pincode || ''}</div>` : ''}
+      </div>
+      <div class="bg-slate-800 rounded-2xl p-4">
+        <div class="font-mono text-xs text-gray-400 uppercase mb-2">Items</div>
+        ${(o.items||[]).map(i => `
+          <div class="flex justify-between py-1 border-b border-white/5 last:border-0">
+            <span class="text-gray-200">${i.productName} × ${i.quantity}</span>
+            <span class="font-mono text-white">${fmt(i.subtotal)}</span>
+          </div>
+        `).join('')}
+        <div class="flex justify-between pt-2 text-gray-400 text-xs"><span>Delivery</span><span>${fmt(o.deliveryCharge)}</span></div>
+        <div class="flex justify-between pt-1 font-medium text-white"><span>Total</span><span class="text-saffron">${fmt(o.total)}</span></div>
+      </div>
+      <div class="flex justify-between text-gray-400">
+        <span>Payment: ${o.paymentMethod}</span>
+        <span class="${o.paymentStatus === 'Paid' ? 'text-green-400' : 'text-yellow-400'}">${o.paymentStatus}</span>
+      </div>
+      <div class="text-gray-500 text-xs font-mono">Placed: ${new Date(o.createdAt).toLocaleString('en-IN')}</div>
+    </div>
+  `;
+  document.getElementById('order-modal').classList.remove('opacity-0', 'pointer-events-none');
+}
+
+document.getElementById('om-close').onclick = () =>
+  document.getElementById('order-modal').classList.add('opacity-0', 'pointer-events-none');
+document.getElementById('om-overlay').onclick = () =>
+  document.getElementById('order-modal').classList.add('opacity-0', 'pointer-events-none');
+
+document.getElementById('order-status-filter').onchange = loadOrders;
+let orderSearchTimer;
+document.getElementById('order-search').addEventListener('input', () => {
+  clearTimeout(orderSearchTimer);
+  orderSearchTimer = setTimeout(loadOrders, 400);
+});
+document.getElementById('refresh-orders').onclick = loadOrders;
+
+// Settings
+document.getElementById('change-pass-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  try {
+    const r = await fetch(`${API}/auth/change-password`, {
+      method: 'POST', headers: apiHeaders(),
+      body: JSON.stringify({ currentPassword: fd.get('current'), newPassword: fd.get('new') }),
+    });
+    const d = await r.json();
+    if (d.success) { showToast('Password changed!', '✅'); e.target.reset(); }
+    else showToast(d.message, '❌');
+  } catch { showToast('Cannot connect to server.', '❌'); }
+});
+
+// ═════════════════════════════════════════════
+// INIT
+// ═════════════════════════════════════════════
+requireAuth();
+</script>
+</body>
+</html>
