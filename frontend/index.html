@@ -799,8 +799,10 @@ function renderProducts() {
   grid.innerHTML = filteredProducts.map(p => `
     <div class="product-card cursor-pointer group" onclick="openModal('${p._id}')">
       <div class="img-wrap">
-        <img src="${p.image || 'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=400&q=80'}"
-          alt="${p.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1596797038530-2c107229654b?w=400&q=80'" />
+        <<img src="${p.image ? 'https://kerala-spice-jar-backend.onrender.com' + p.image : 'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=400&q=80'}"
+     alt="${p.name}"
+     loading="lazy"
+     onerror="this.src='https://images.unsplash.com/photo-1596797038530-2c107229654b?w=400&q=80'" />
         <div class="absolute top-3 left-3 flex flex-col gap-1">
           ${p.isFeatured ? '<span class="bg-saffron text-white font-mono text-xs px-2 py-0.5 rounded-full">★ Featured</span>' : ''}
           ${!p.inStock ? '<span class="badge-outofstock font-mono text-xs px-2 py-0.5 rounded-full">Out of Stock</span>' : ''}
