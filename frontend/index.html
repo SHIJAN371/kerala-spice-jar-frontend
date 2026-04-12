@@ -1238,6 +1238,7 @@ updateCartUI();
 </script>
 </body>
 </html>
+<script>
 document.getElementById("contact-form").addEventListener("submit", async function(e) {
   e.preventDefault();
 
@@ -1261,7 +1262,6 @@ document.getElementById("contact-form").addEventListener("submit", async functio
 
     if (res.ok) {
       alert("Message sent successfully ✅");
-
       document.getElementById("contact-form").reset();
     } else {
       alert("Failed to send message ❌");
@@ -1270,3 +1270,4 @@ document.getElementById("contact-form").addEventListener("submit", async functio
     alert("Server error ❌");
   }
 });
+</script>
