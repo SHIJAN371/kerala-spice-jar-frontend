@@ -482,15 +482,15 @@ class="whatsapp-btn flex items-center gap-3 text-white px-6 py-3 rounded-full fo
     <div class="bg-parchment border border-saffron/20 rounded-2xl p-8 text-left max-w-lg mx-auto">
       <h3 class="font-display text-xl text-dark mb-4">Send us a message</h3>
       <form id="contact-form" class="space-y-4">
-        <input type="text" placeholder="Your Name" required
-          class="w-full border border-saffron/30 rounded-xl px-4 py-3 font-body bg-white focus:outline-none focus:border-saffron" />
-        <input type="tel" placeholder="Phone Number" required
-          class="w-full border border-saffron/30 rounded-xl px-4 py-3 font-body bg-white focus:outline-none focus:border-saffron" />
-        <textarea placeholder="Your message…" rows="4"
+        <input id="name" type="text" placeholder="Your Name" required ... />
+
+<input id="phone" type="tel" placeholder="Phone Number" required ... />
+
+<textarea id="message" placeholder="Your message…" rows="4" ...></textarea>
           class="w-full border border-saffron/30 rounded-xl px-4 py-3 font-body bg-white focus:outline-none focus:border-saffron resize-none"></textarea>
         <button type="submit"
           class="w-full bg-saffron hover:bg-terracotta text-white font-body text-base py-3 rounded-xl transition-colors">
-          Send on WhatsApp <i class="fab fa-whatsapp ml-1"></i>
+          Send Message <i class="fab fa-whatsapp ml-1"></i>
         </button>
       </form>
     </div>
@@ -1238,3 +1238,35 @@ updateCartUI();
 </script>
 </body>
 </html>
+document.getElementById("contact-form").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value;
+  const message = document.getElementById("message").value;
+
+  if (!name || !phone || !message) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  try {
+    const res = await fetch("https://kerala-spice-jar-backend.onrender.com/api/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ name, phone, message })
+    });
+
+    if (res.ok) {
+      alert("Message sent successfully ✅");
+
+      document.getElementById("contact-form").reset();
+    } else {
+      alert("Failed to send message ❌");
+    }
+  } catch (err) {
+    alert("Server error ❌");
+  }
+});
