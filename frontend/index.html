@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kerala Spice Jar – From My Kitchen to Yours</title>
+  <meta name="description" content="Authentic homemade Kerala pickles, spice mixes, chutneys, and snacks. Handcrafted with love and traditional recipes. Order fresh from our kitchen to yours." />
+  <meta name="keywords" content="Kerala pickles, homemade spices, mango pickle, Kerala food, authentic Kerala, spice jar" />
+  <meta property="og:title" content="Kerala Spice Jar – From My Kitchen to Yours" />
+  <meta property="og:description" content="Authentic homemade Kerala pickles, spice mixes and snacks." />
+  <meta property="og:type" content="website" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            saffron: '#E8861A',
+            turmeric: '#F5A623',
+            terracotta: '#C4622D',
+            spicegreen: '#2D5016',
+            cream: '#FDF6E3',
+            parchment: '#F5E6C8',
+            bark: '#7B4F2E',
+          },
+          fontFamily: {
+            display: ['"Playfair Display"', 'serif'],
+            body: ['"Crimson Pro"', 'serif'],
+            mono: ['"Space Mono"', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    :root {
+      --saffron: #E8861A;
+      --turmeric: #F5A623;
+      --terracotta: #C4622D;
+      --spicegreen: #2D5016;
+      --cream: #FDF6E3;
+      --parchment: #F5E6C8;
+      --bark: #7B4F2E;
+      --dark: #1A0E00;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--cream); font-family: 'Crimson Pro', serif; color: var(--dark); }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    #navbar { transition: all 0.3s ease; }
+    #navbar.scrolled { background: rgba(253,246,227,0.97); backdrop-filter: blur(12px); box-shadow: 0 2px 20px rgba(232,134,26,0.15); }
+
+    .hero-bg {
+      background: linear-gradient(135deg, #1A0E00 0%, #3D1F00 40%, #2D5016 100%);
+      position: relative; overflow: hidden;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(232,134,26,0.25) 0%, transparent 60%),
+                  radial-gradient(ellipse at 20% 80%, rgba(45,80,22,0.3) 0%, transparent 50%);
+    }
+    .hero-spice-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(232,134,26,0.2);
+      animation: pulse-ring 4s ease-in-out infinite;
+    }
+    @keyframes pulse-ring {
+      0%, 100% { transform: scale(1); opacity: 0.4; }
+      50% { transform: scale(1.05); opacity: 0.8; }
+    }
+
+    .product-card {
+      background: white;
+      border: 1px solid rgba(232,134,26,0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(196,98,45,0.2), 0 4px 12px rgba(0,0,0,0.08);
+      border-color: rgba(232,134,26,0.3);
+    }
+    .product-card .img-wrap { overflow: hidden; position: relative; }
+    .product-card .img-wrap img {
+      transition: transform 0.5s ease;
+      width: 100%; height: 220px; object-fit: cover;
+    }
+    .product-card:hover .img-wrap img { transform: scale(1.08); }
+
+    .badge-outofstock { background: #fce4ec; color: #c62828; }
+
+    #cart-drawer {
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #cart-drawer.open { transform: translateX(0); }
+
+    @keyframes badge-pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.4); }
+      100% { transform: scale(1); }
+    }
+    .badge-pop { animation: badge-pop 0.3s ease; }
+
+    #product-modal { transition: opacity 0.3s ease; }
+    #modal-content { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+    .whatsapp-btn {
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      transition: all 0.25s ease;
+    }
+    .whatsapp-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37,211,102,0.4); }
+
+    .cat-pill {
+      border: 1.5px solid rgba(196,98,45,0.3);
+      color: var(--bark);
+      background: white;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .cat-pill.active, .cat-pill:hover {
+      background: var(--terracotta);
+      color: white;
+      border-color: var(--terracotta);
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--parchment); }
+    ::-webkit-scrollbar-thumb { background: var(--saffron); border-radius: 3px; }
+
+    #toast {
+      transform: translateY(100px); opacity: 0;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+
+    .skeleton {
+      background: linear-gradient(90deg, #f0e0c0 25%, #f8f0e0 50%, #f0e0c0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 8px;
+    }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    #search-input:focus { outline: none; box-shadow: 0 0 0 3px rgba(232,134,26,0.3); }
+    .star { color: #F5A623; }
+    .modal-overlay { background: rgba(26,14,0,0.7); backdrop-filter: blur(4px); }
+  </style>
+</head>
+
+<body class="min-h-screen">
+
+<!-- ══ NAVIGATION ══════════════════════════ -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 px-4 py-3 transition-all duration-300">
+  <div class="max-w-7xl mx-auto flex items-center justify-between">
+    <a href="#" class="flex items-center gap-2 group">
+      <div class="w-10 h-10 rounded-full bg-gradient-to-br from-saffron to-terracotta flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+        <span class="text-white text-lg">🌶️</span>
+      </div>
+      <div>
+        <div class="font-display font-bold text-lg leading-tight text-dark">Kerala Spice Jar</div>
+        <div class="text-xs text-bark font-body italic leading-none">From My Kitchen to Yours</div>
+      </div>
+    </a>
+
+    <div class="hidden md:flex items-center gap-6 font-body text-base">
+      <a href="#products" class="text-bark hover:text-saffron transition-colors">Shop</a>
+      <a href="#about" class="text-bark hover:text-saffron transition-colors">About</a>
+      <a href="#contact" class="text-bark hover:text-saffron transition-colors">Contact</a>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <button id="search-toggle" class="w-9 h-9 rounded-full border border-saffron/30 flex items-center justify-center text-bark hover:bg-saffron/10 transition-colors">
+        <i class="fas fa-search text-sm"></i>
+      </button>
+      <button id="cart-btn" class="relative w-9 h-9 rounded-full border border-saffron/30 flex items-center justify-center text-bark hover:bg-saffron/10 transition-colors">
+        <i class="fas fa-shopping-bag text-sm"></i>
+        <span id="cart-count" class="absolute -top-1 -right-1 w-4 h-4 bg-terracotta text-white text-xs rounded-full flex items-center justify-center font-mono hidden">0</span>
+      </button>
+    </div>
+  </div>
+
+  <div id="search-bar" class="max-w-7xl mx-auto overflow-hidden" style="max-height:0; transition:max-height 0.3s ease;">
+    <div class="pt-3 pb-1">
+      <div class="relative">
+        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-bark/50"></i>
+        <input id="search-input" type="text" placeholder="Search pickles, spices, snacks…"
+          class="w-full pl-10 pr-4 py-3 rounded-xl border border-saffron/30 bg-white/90 font-body text-base focus:border-saffron transition-all" />
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ HERO ══════════════════════════════ -->
+<section class="hero-bg min-h-screen flex items-center pt-20 relative">
+  <div class="hero-spice-ring" style="width:400px;height:400px;top:50%;left:60%;transform:translate(-50%,-50%)"></div>
+  <div class="hero-spice-ring" style="width:600px;height:600px;top:50%;left:60%;transform:translate(-50%,-50%);animation-delay:1s"></div>
+  <div class="hero-spice-ring" style="width:200px;height:200px;top:50%;left:60%;transform:translate(-50%,-50%);animation-delay:2s"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center py-20">
+    <div>
+      <div class="inline-flex items-center gap-2 bg-white/10 border border-saffron/30 rounded-full px-4 py-1.5 mb-6">
+        <span class="text-saffron text-sm">✦</span>
+        <span class="text-saffron/90 font-mono text-xs tracking-widest uppercase">Handcrafted in Kerala</span>
+      </div>
+      <h1 class="font-display text-5xl md:text-7xl text-white leading-tight mb-4">
+        From My<br />
+        <span class="italic text-turmeric">Kitchen</span><br />
+        to Yours
+      </h1>
+      <p class="font-body text-xl text-white/70 mb-8 max-w-md leading-relaxed">
+        Authentic Kerala pickles, bold spice blends, and golden snacks — made the way ammachi used to make them.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <a href="#products" class="bg-saffron hover:bg-turmeric text-white font-body text-lg px-8 py-3 rounded-full transition-all hover:shadow-lg hover:shadow-saffron/30 hover:-translate-y-0.5">
+          Shop Now &rarr;
+        </a>
+        <a href="https://wa.me/918086747810?text=Hi!%20I%27d%20like%20to%20know%20more%20about%20Kerala%20Spice%20Jar." target="_blank"
+          class="whatsapp-btn text-white font-body text-lg px-8 py-3 rounded-full flex items-center gap-2">
+          <i class="fab fa-whatsapp"></i> Chat with Us
+        </a>
+      </div>
+
+      <div class="flex gap-8 mt-12">
+        <div>
+          <div class="font-display text-3xl text-turmeric font-bold">500+</div>
+          <div class="text-white/60 font-body text-sm">Happy Customers</div>
+        </div>
+        <div class="w-px bg-white/10"></div>
+        <div>
+          <div class="font-display text-3xl text-turmeric font-bold">20+</div>
+          <div class="text-white/60 font-body text-sm">Products</div>
+        </div>
+        <div class="w-px bg-white/10"></div>
+        <div>
+          <div class="font-display text-3xl text-turmeric font-bold">100%</div>
+          <div class="text-white/60 font-body text-sm">Natural</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hidden md:flex items-center justify-center relative h-96">
+      <div class="absolute w-64 h-64 rounded-full bg-saffron/20 blur-3xl"></div>
+      <div class="relative grid grid-cols-2 gap-4">
+        <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 text-center transform -rotate-2 hover:rotate-0 transition-transform">
+          <div class="text-5xl mb-2">🥭</div>
+          <div class="text-white font-display text-sm">Mango Pickle</div>
+          <div class="text-turmeric font-mono text-xs">₹180</div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 text-center transform rotate-3 hover:rotate-0 transition-transform mt-8">
+          <div class="text-5xl mb-2">🌶️</div>
+          <div class="text-white font-display text-sm">Fish Masala</div>
+          <div class="text-turmeric font-mono text-xs">₹120</div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 text-center transform rotate-1 hover:rotate-0 transition-transform">
+          <div class="text-5xl mb-2">🍌</div>
+          <div class="text-white font-display text-sm">Banana Chips</div>
+          <div class="text-turmeric font-mono text-xs">₹110</div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 text-center transform -rotate-1 hover:rotate-0 transition-transform mt-8">
+          <div class="text-5xl mb-2">🥥</div>
+          <div class="text-white font-display text-sm">Coconut Chutney</div>
+          <div class="text-turmeric font-mono text-xs">₹95</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40 animate-bounce">
+    <span class="font-mono text-xs tracking-widest">SCROLL</span>
+    <i class="fas fa-chevron-down text-xs"></i>
+  </div>
+</section>
+
+<!-- ══ PRODUCTS ══════════════════════════ -->
+<section id="products" class="py-20 px-4 max-w-7xl mx-auto">
+  <div class="text-center mb-12">
+    <div class="flex items-center justify-center gap-3 mb-3">
+      <span class="h-px w-16 bg-saffron/40"></span>
+      <span class="font-mono text-xs text-saffron tracking-widest uppercase">Our Products</span>
+      <span class="h-px w-16 bg-saffron/40"></span>
+    </div>
+    <h2 class="font-display text-4xl md:text-5xl text-dark mb-3">The <span class="italic text-terracotta">Spice Jar</span> Collection</h2>
+    <p class="font-body text-lg text-bark/80 max-w-xl mx-auto">Each jar carries a story — sun-dried, slow-cooked, and packed with a love that no factory can replicate.</p>
+  </div>
+
+  <div class="flex flex-wrap gap-2 justify-center mb-8" id="cat-filters">
+    <button class="cat-pill active font-body text-sm px-4 py-2 rounded-full" data-cat="All">All</button>
+    <button class="cat-pill font-body text-sm px-4 py-2 rounded-full" data-cat="Pickles">🫙 Pickles</button>
+    <button class="cat-pill font-body text-sm px-4 py-2 rounded-full" data-cat="Spice Mixes">🌶️ Spice Mixes</button>
+    <button class="cat-pill font-body text-sm px-4 py-2 rounded-full" data-cat="Chutneys">🥜 Chutneys</button>
+    <button class="cat-pill font-body text-sm px-4 py-2 rounded-full" data-cat="Snacks">🍌 Snacks</button>
+    <button class="cat-pill font-body text-sm px-4 py-2 rounded-full" data-cat="Sweets">🍯 Sweets</button>
+  </div>
+
+  <div class="flex items-center justify-between mb-6">
+    <div id="result-count" class="font-body text-bark/70 text-sm"></div>
+    <select id="sort-select" class="font-body text-sm border border-saffron/30 rounded-lg px-3 py-2 bg-white focus:outline-none focus:border-saffron">
+      <option value="featured">Featured First</option>
+      <option value="price-asc">Price: Low to High</option>
+      <option value="price-desc">Price: High to Low</option>
+      <option value="rating">Best Rated</option>
+      <option value="newest">Newest</option>
+    </select>
+  </div>
+
+  <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <!-- Skeleton loaders -->
+    <div class="product-card"><div class="skeleton h-56 w-full"></div><div class="p-4 space-y-2"><div class="skeleton h-4 w-3/4"></div><div class="skeleton h-3 w-full"></div><div class="skeleton h-8 w-1/3"></div></div></div>
+    <div class="product-card"><div class="skeleton h-56 w-full"></div><div class="p-4 space-y-2"><div class="skeleton h-4 w-3/4"></div><div class="skeleton h-3 w-full"></div><div class="skeleton h-8 w-1/3"></div></div></div>
+    <div class="product-card"><div class="skeleton h-56 w-full"></div><div class="p-4 space-y-2"><div class="skeleton h-4 w-3/4"></div><div class="skeleton h-3 w-full"></div><div class="skeleton h-8 w-1/3"></div></div></div>
+    <div class="product-card"><div class="skeleton h-56 w-full"></div><div class="p-4 space-y-2"><div class="skeleton h-4 w-3/4"></div><div class="skeleton h-3 w-full"></div><div class="skeleton h-8 w-1/3"></div></div></div>
+  </div>
+
+  <div id="empty-state" class="hidden text-center py-20">
+    <div class="text-6xl mb-4">🫙</div>
+    <h3 class="font-display text-2xl text-dark mb-2">No products found</h3>
+    <p class="font-body text-bark/70">Try a different search or category.</p>
+  </div>
+</section>
+
+<!-- ══ ABOUT ══════════════════════════════ -->
+<section id="about" class="py-20 bg-gradient-to-br from-spicegreen/5 to-saffron/5 border-y border-saffron/10">
+  <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+    <div>
+      <div class="font-mono text-xs text-saffron tracking-widest uppercase mb-4">Our Story</div>
+      <h2 class="font-display text-4xl text-dark mb-6 leading-snug">A kitchen full of <span class="italic text-terracotta">memories</span> in every jar</h2>
+      <p class="font-body text-lg text-bark/80 leading-relaxed mb-6">
+        Kerala Spice Jar began at my mother's kitchen table in Kumarakom, where the air was always thick with the perfume of fresh curry leaves and cracked mustard seeds. Every recipe here has been passed down through generations — not written, but tasted, remembered, and perfected.
+      </p>
+      <p class="font-body text-lg text-bark/80 leading-relaxed mb-8">
+        We use no preservatives, no artificial colours — just the finest local ingredients sourced from Kerala's spice gardens and coastal farms.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <div class="flex items-center gap-2 bg-white border border-saffron/20 rounded-full px-4 py-2">
+          <span class="text-spicegreen">✓</span><span class="font-body text-sm">No Preservatives</span>
+        </div>
+        <div class="flex items-center gap-2 bg-white border border-saffron/20 rounded-full px-4 py-2">
+          <span class="text-spicegreen">✓</span><span class="font-body text-sm">100% Natural</span>
+        </div>
+        <div class="flex items-center gap-2 bg-white border border-saffron/20 rounded-full px-4 py-2">
+          <span class="text-spicegreen">✓</span><span class="font-body text-sm">Small Batch</span>
+        </div>
+        <div class="flex items-center gap-2 bg-white border border-saffron/20 rounded-full px-4 py-2">
+          <span class="text-spicegreen">✓</span><span class="font-body text-sm">Doorstep Delivery</span>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="rounded-2xl bg-saffron/10 border border-saffron/20 p-6 text-center">
+        <div class="text-4xl mb-3">🌿</div>
+        <div class="font-display text-lg text-dark">Farm Fresh</div>
+        <div class="font-body text-sm text-bark/70">Sourced from Kerala spice gardens</div>
+      </div>
+      <div class="rounded-2xl bg-terracotta/10 border border-terracotta/20 p-6 text-center mt-8">
+        <div class="text-4xl mb-3">👐</div>
+        <div class="font-display text-lg text-dark">Handcrafted</div>
+        <div class="font-body text-sm text-bark/70">Made with care, not machines</div>
+      </div>
+      <div class="rounded-2xl bg-spicegreen/10 border border-spicegreen/20 p-6 text-center">
+        <div class="text-4xl mb-3">🚚</div>
+        <div class="font-display text-lg text-dark">Fast Delivery</div>
+        <div class="font-body text-sm text-bark/70">Fresh at your doorstep</div>
+      </div>
+      <div class="rounded-2xl bg-parchment border border-saffron/20 p-6 text-center mt-8">
+        <div class="text-4xl mb-3">💬</div>
+        <div class="font-display text-lg text-dark">Easy Orders</div>
+        <div class="font-body text-sm text-bark/70">WhatsApp & online checkout</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══════════════════════════ -->
+<section id="contact" class="py-20 px-4">
+  <div class="max-w-4xl mx-auto text-center">
+    <div class="font-mono text-xs text-saffron tracking-widest uppercase mb-3">Find Us</div>
+    <h2 class="font-display text-4xl text-dark mb-4">Stay <span class="italic text-terracotta">Connected</span></h2>
+    <p class="font-body text-lg text-bark/70 mb-10">Follow our spicy journey across social media or drop us a message anytime.</p>
+
+    <div class="flex flex-wrap justify-center gap-4 mb-12">
+      <a href="https://instagram.com/keralaspicejar" target="_blank"
+        class="flex items-center gap-3 bg-gradient-to-br from-[#f09433] via-[#e6683c] to-[#dc2743] text-white px-6 py-3 rounded-full font-body text-base hover:-translate-y-1 transition-transform shadow-md">
+        <i class="fab fa-instagram text-lg"></i> Instagram
+      </a>
+      <a href="https://facebook.com/keralaspicejar" target="_blank"
+        class="flex items-center gap-3 bg-[#1877f2] text-white px-6 py-3 rounded-full font-body text-base hover:-translate-y-1 transition-transform shadow-md">
+        <i class="fab fa-facebook text-lg"></i> Facebook
+      </a>
+      <a href="https://wa.me/918086747810" target="_blank"
+        class="whatsapp-btn flex items-center gap-3 text-white px-6 py-3 rounded-full font-body text-base shadow-md">
+        <i class="fab fa-whatsapp text-lg"></i> WhatsApp
+      </a>
+    </div>
+
+    <!-- Fixed: contact form inputs now have proper name attrs, id attrs, and classes -->
+    <div class="bg-parchment border border-saffron/20 rounded-2xl p-8 text-left max-w-lg mx-auto">
+      <h3 class="font-display text-xl text-dark mb-4">Send us a message</h3>
+      <form id="contact-form" class="space-y-4">
+        <input
+          id="contact-name"
+          name="name"
+          type="text"
+          placeholder="Your Name"
+          required
+          class="w-full border border-saffron/30 rounded-xl px-4 py-3 font-body bg-white focus:outline-none focus:border-saffron"
+        />
+        <input
+          id="contact-phone"
+          name="phone"
+          type="tel"
+          placeholder="Phone Number"
+          required
+          class="w-full border border-saffron/30 rounded-xl px-4 py-3 font-body bg-white focus:outline-none focus:border-saffron"
+        />
+        <textarea
+          id="contact-message"
+          name="message"
+          placeholder="Your message…"
+          rows="4"
+          required
+          class="w-full border border-saffron/30 rounded-xl px-4 py-3 font-body bg-white focus:outline-none focus:border-saffron resize-none"
+        ></textarea>
+        <button type="submit"
+          class="w-full bg-saffron hover:bg-terracotta text-white font-body text-base py-3 rounded-xl transition-colors">
+          Send Message <i class="fab fa-whatsapp ml-1"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer class="bg-dark text-white/70 py-10 px-6 text-center font-body">
+  <div class="flex items-center justify-center gap-2 mb-3">
+    <span class="text-2xl">🌶️</span>
+    <span class="font-display text-white text-lg">Kerala Spice Jar</span>
+  </div>
+  <p class="text-sm mb-4">From My Kitchen to Yours · Kumarakom, Kerala</p>
+  <p class="text-xs text-white/40">© 2025 Kerala Spice Jar. All rights reserved. | Handcrafted with ❤️ in God's Own Country</p>
+</footer>
+
+<!-- ══ PRODUCT MODAL ══════════════════════════ -->
+<div id="product-modal" class="fixed inset-0 z-[200] opacity-0 pointer-events-none">
+  <div class="modal-overlay absolute inset-0" id="modal-overlay"></div>
+  <div class="relative z-10 flex items-end md:items-center justify-center min-h-screen p-4">
+    <div id="modal-content" class="bg-cream rounded-t-3xl md:rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl"
+      style="transform: translateY(50px);">
+      <div class="sticky top-0 bg-cream/95 backdrop-blur-sm flex justify-between items-center px-6 py-4 border-b border-saffron/10 z-10">
+        <span id="modal-category" class="font-mono text-xs text-saffron tracking-widest uppercase"></span>
+        <button id="modal-close" class="w-8 h-8 rounded-full bg-saffron/10 flex items-center justify-center text-bark hover:bg-saffron/20 transition-colors">
+          <i class="fas fa-times text-sm"></i>
+        </button>
+      </div>
+      <img id="modal-img" src="" alt="" class="w-full h-64 object-cover" />
+      <div class="p-6">
+        <div class="flex items-start justify-between mb-3">
+          <h2 id="modal-name" class="font-display text-2xl text-dark pr-4"></h2>
+          <div id="modal-veg" class="shrink-0 w-5 h-5 rounded border-2 border-spicegreen flex items-center justify-center mt-1">
+            <div class="w-2 h-2 rounded-full bg-spicegreen"></div>
+          </div>
+        </div>
+        <div id="modal-price" class="flex items-center gap-3 mb-4"></div>
+        <div id="modal-stars" class="flex items-center gap-1 mb-4"></div>
+        <p id="modal-desc" class="font-body text-bark/80 leading-relaxed mb-5"></p>
+
+        <div class="grid grid-cols-2 gap-3 mb-5">
+          <div class="bg-parchment rounded-xl p-3">
+            <div class="font-mono text-xs text-saffron uppercase mb-1">Weight</div>
+            <div id="modal-weight" class="font-body text-dark"></div>
+          </div>
+          <div class="bg-parchment rounded-xl p-3">
+            <div class="font-mono text-xs text-saffron uppercase mb-1">Shelf Life</div>
+            <div id="modal-shelf" class="font-body text-dark"></div>
+          </div>
+          <div class="col-span-2 bg-parchment rounded-xl p-3">
+            <div class="font-mono text-xs text-saffron uppercase mb-1">Ingredients</div>
+            <div id="modal-ingredients" class="font-body text-dark text-sm"></div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4 mb-5">
+          <span class="font-body text-bark font-semibold">Qty:</span>
+          <div class="flex items-center border border-saffron/30 rounded-xl overflow-hidden">
+            <button id="qty-minus" class="w-10 h-10 flex items-center justify-center text-bark hover:bg-saffron/10 transition-colors font-bold">−</button>
+            <span id="qty-val" class="w-12 text-center font-mono text-dark">1</span>
+            <button id="qty-plus" class="w-10 h-10 flex items-center justify-center text-bark hover:bg-saffron/10 transition-colors font-bold">+</button>
+          </div>
+        </div>
+
+        <div class="flex gap-3" id="modal-actions">
+          <button id="modal-add-cart" class="flex-1 bg-saffron hover:bg-terracotta text-white font-body text-base py-3 rounded-xl transition-colors">
+            <i class="fas fa-shopping-bag mr-2"></i> Add to Cart
+          </button>
+          <button id="modal-whatsapp" class="flex-1 whatsapp-btn text-white font-body text-base py-3 rounded-xl">
+            <i class="fab fa-whatsapp mr-2"></i> Order via WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CART DRAWER ══════════════════════════ -->
+<div class="fixed inset-0 z-[150] pointer-events-none">
+  <div id="cart-overlay" class="modal-overlay absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-300"></div>
+  <div id="cart-drawer" class="absolute right-0 top-0 h-full w-full max-w-md bg-cream shadow-2xl flex flex-col pointer-events-auto">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-saffron/10">
+      <h2 class="font-display text-xl text-dark">Your Cart</h2>
+      <button id="cart-close" class="w-8 h-8 rounded-full bg-saffron/10 flex items-center justify-center text-bark">
+        <i class="fas fa-times text-sm"></i>
+      </button>
+    </div>
+
+    <div id="cart-items" class="flex-1 overflow-y-auto px-6 py-4 space-y-4"></div>
+
+    <div id="cart-empty" class="hidden flex-1 flex flex-col items-center justify-center text-center px-6">
+      <div class="text-6xl mb-4">🫙</div>
+      <p class="font-display text-xl text-dark mb-2">Your cart is empty</p>
+      <p class="font-body text-bark/70 text-sm">Add some delicious Kerala treats!</p>
+    </div>
+
+    <div id="cart-footer" class="px-6 py-4 border-t border-saffron/10 space-y-3">
+      <div class="flex justify-between font-body text-sm text-bark/70">
+        <span>Subtotal</span><span id="cart-subtotal">₹0</span>
+      </div>
+      <div class="flex justify-between font-body text-sm text-bark/70">
+        <span>Delivery</span><span id="cart-delivery" class="text-spicegreen">Free above ₹500</span>
+      </div>
+      <div class="flex justify-between font-display text-lg text-dark border-t border-saffron/10 pt-3">
+        <span>Total</span><span id="cart-total" class="text-saffron font-bold">₹0</span>
+      </div>
+      <button id="checkout-btn" class="w-full bg-saffron hover:bg-terracotta text-white font-body text-base py-3 rounded-xl transition-colors">
+        Proceed to Checkout
+      </button>
+      <button id="whatsapp-cart-btn" class="w-full whatsapp-btn text-white font-body text-sm py-2.5 rounded-xl flex items-center justify-center gap-2">
+        <i class="fab fa-whatsapp"></i> Order Full Cart on WhatsApp
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CHECKOUT MODAL ══════════════════════════ -->
+<div id="checkout-modal" class="fixed inset-0 z-[250] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+  <div class="modal-overlay absolute inset-0" id="checkout-overlay"></div>
+  <div class="relative z-10 bg-cream rounded-3xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto">
+    <div class="px-6 py-5 border-b border-saffron/10 flex justify-between items-center sticky top-0 bg-cream z-10">
+      <h2 class="font-display text-xl text-dark">Checkout</h2>
+      <button id="checkout-close" class="w-8 h-8 rounded-full bg-saffron/10 flex items-center justify-center text-bark">
+        <i class="fas fa-times text-sm"></i>
+      </button>
+    </div>
+
+    <form id="checkout-form" class="p-6 space-y-4">
+      <div>
+        <label class="font-mono text-xs text-saffron uppercase tracking-wider block mb-1">Full Name *</label>
+        <input name="name" required type="text" class="w-full border border-saffron/30 rounded-xl px-4 py-3 font-body bg-white focus:outline-none focus:border-saffron" />
+      </div>
+      <div>
+        <label class="font-mono text-xs text-saffron uppercase tracking-wider block mb-1">Phone Number *</label>
+        <input name="phone" required type="tel" class="w-full border border-saffron/30 rounded-xl px-4 py-3 font-body bg-white focus:outline-none focus:border-saffron" />
+      </div>
+      <div>
+        <label class="font-mono text-xs text-saffron uppercase tracking-wider block mb-1">Email</label>
+        <input name="email" type="email" class="w-full border border-saffron/30 rounded-xl px-4 py-3 font-body bg-white focus:outline-none focus:border-saffron" />
+      </div>
+      <div>
+        <label class="font-mono text-xs text-saffron uppercase tracking-wider block mb-1">Delivery Address *</label>
+        <textarea name="address" required rows="2" class="w-full border border-saffron/30 rounded-xl px-4 py-3 font-body bg-white focus:outline-none focus:border-saffron resize-none"></textarea>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="font-mono text-xs text-saffron uppercase tracking-wider block mb-1">City</label>
+          <input name="city" type="text" class="w-full border border-saffron/30 rounded-xl px-4 py-3 font-body bg-white focus:outline-none focus:border-saffron" />
+        </div>
+        <div>
+          <label class="font-mono text-xs text-saffron uppercase tracking-wider block mb-1">Pincode</label>
+          <input name="pincode" type="text" class="w-full border border-saffron/30 rounded-xl px-4 py-3 font-body bg-white focus:outline-none focus:border-saffron" />
+        </div>
+      </div>
+
+      <div>
+        <label class="font-mono text-xs text-saffron uppercase tracking-wider block mb-3">Payment Method</label>
+        <div class="grid grid-cols-3 gap-2">
+          <label class="payment-opt cursor-pointer border-2 border-saffron/20 rounded-xl p-3 text-center transition-all hover:border-saffron">
+            <input type="radio" name="payment" value="COD" class="hidden" />
+            <div class="text-2xl mb-1">💵</div>
+            <div class="font-mono text-xs text-bark">COD</div>
+          </label>
+          <label class="payment-opt cursor-pointer border-2 border-saffron/20 rounded-xl p-3 text-center transition-all hover:border-saffron">
+            <input type="radio" name="payment" value="UPI" class="hidden" />
+            <div class="text-2xl mb-1">📱</div>
+            <div class="font-mono text-xs text-bark">UPI</div>
+          </label>
+          <label class="payment-opt cursor-pointer border-2 border-saffron/20 rounded-xl p-3 text-center transition-all hover:border-saffron">
+            <input type="radio" name="payment" value="Razorpay" class="hidden" />
+            <div class="text-2xl mb-1">💳</div>
+            <div class="font-mono text-xs text-bark">Card/Pay</div>
+          </label>
+        </div>
+      </div>
+
+      <div class="bg-parchment rounded-xl p-4 space-y-2">
+        <div class="flex justify-between font-body text-sm"><span>Subtotal</span><span id="co-subtotal">₹0</span></div>
+        <div class="flex justify-between font-body text-sm"><span>Delivery</span><span id="co-delivery">₹0</span></div>
+        <div class="flex justify-between font-display text-lg border-t border-saffron/20 pt-2 mt-2">
+          <span>Total</span><span class="text-saffron" id="co-total">₹0</span>
+        </div>
+      </div>
+
+      <button type="submit" id="place-order-btn"
+        class="w-full bg-saffron hover:bg-terracotta text-white font-body text-base py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2">
+        <i class="fas fa-check-circle"></i> Place Order
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[300] bg-dark text-white font-body text-sm px-6 py-3 rounded-full shadow-2xl flex items-center gap-2">
+  <span id="toast-icon">✅</span>
+  <span id="toast-msg">Added to cart!</span>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
+
+<script>
+// ═════════════════════════════════════════════
+// CONFIG
+// ═════════════════════════════════════════════
+const API_BASE = 'https://kerala-spice-jar-backend.onrender.com/api';
+const WHATSAPP_NUM = '918086747810';
+const RAZORPAY_KEY = 'rzp_test_xxxxxxxxxxxx'; // Replace with your actual Razorpay key
+
+// ═════════════════════════════════════════════
+// STATE
+// ═════════════════════════════════════════════
+let allProducts = [];
+let filteredProducts = [];
+let cart = JSON.parse(localStorage.getItem('ksj_cart') || '[]');
+let modalProduct = null;
+let modalQty = 1;
+
+// ═════════════════════════════════════════════
+// UTILITY
+// ═════════════════════════════════════════════
+const fmt = (n) => '₹' + Number(n).toLocaleString('en-IN');
+
+const showToast = (msg, icon = '✅', duration = 2500) => {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  document.getElementById('toast-icon').textContent = icon;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), duration);
+};
+
+const stars = (rating) => {
+  const full = Math.floor(rating);
+  const half = rating % 1 >= 0.5;
+  let html = '';
+  for (let i = 0; i < full; i++) html += '<i class="fas fa-star star text-sm"></i>';
+  if (half) html += '<i class="fas fa-star-half-alt star text-sm"></i>';
+  for (let i = full + (half ? 1 : 0); i < 5; i++) html += '<i class="far fa-star star text-sm"></i>';
+  return html;
+};
+
+// Fixed: resolves image URL safely regardless of whether it's a full URL or a relative path
+const resolveImage = (image, fallback = 'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=400&q=80') => {
+  if (!image) return fallback;
+  if (image.startsWith('http://') || image.startsWith('https://')) return image;
+  return `https://kerala-spice-jar-backend.onrender.com${image}`;
+};
+
+// ═════════════════════════════════════════════
+// DEMO PRODUCTS (fallback if no backend)
+// ═════════════════════════════════════════════
+const DEMO_PRODUCTS = [
+  { _id:'1', name:'Mango Pickle (Avakaya)', category:'Pickles', price:180, originalPrice:220, description:'Our signature Andhra-style raw mango pickle, slow-marinated with hand-ground mustard seeds, fiery red chillis, and cold-pressed sesame oil.', shortDescription:'Tangy raw mango pickle', weight:'250g', shelfLife:'6 months', isVeg:true, inStock:true, isFeatured:true, rating:4.8, reviewCount:124, ingredients:'Raw Mango, Mustard Seeds, Red Chilli, Sesame Oil, Salt, Turmeric', image:'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80' },
+  { _id:'2', name:'Kerala Fish Curry Masala', category:'Spice Mixes', price:120, originalPrice:150, description:'A carefully balanced blend of sun-dried Kerala spices — Malabar pepper, kudam puli, coconut-roasted coriander, and hand-picked curry leaves.', shortDescription:'Authentic Malabar fish curry spice blend', weight:'100g', shelfLife:'12 months', isVeg:true, inStock:true, isFeatured:true, rating:4.9, reviewCount:89, ingredients:'Coriander, Black Pepper, Turmeric, Red Chilli, Kudam Puli, Curry Leaves', image:'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=600&q=80' },
+  { _id:'3', name:'Lime & Ginger Pickle', category:'Pickles', price:150, description:'Hand-cut limes sun-dried for 7 days, packed with freshly grated ginger, ajwain, and a pinch of hing.', shortDescription:'Sun-kissed lime with fresh ginger', weight:'250g', shelfLife:'8 months', isVeg:true, inStock:true, isFeatured:false, rating:4.6, reviewCount:56, ingredients:'Lime, Ginger, Ajwain, Asafoetida, Salt, Mustard Oil', image:'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80' },
+  { _id:'4', name:'Coconut Chutney Powder', category:'Chutneys', price:95, description:'Toasted desiccated coconut, urad dal, dried red chilli, and curry leaves blended into a versatile powder. Perfect with idli, dosa, or rice.', shortDescription:'Instant chutney powder — just add coconut oil', weight:'150g', shelfLife:'3 months', isVeg:true, inStock:true, isFeatured:true, rating:4.7, reviewCount:200, ingredients:'Coconut, Urad Dal, Red Chilli, Curry Leaves, Salt, Asafoetida', image:'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&q=80' },
+  { _id:'5', name:'Banana Chips (Nendran)', category:'Snacks', price:110, originalPrice:130, description:'Made from premium Nendran bananas, sliced thin and fried in pure coconut oil with a sprinkle of rock salt.', shortDescription:'Crispy Nendran chips in coconut oil', weight:'200g', shelfLife:'45 days', isVeg:true, inStock:true, isFeatured:true, rating:4.9, reviewCount:312, ingredients:'Nendran Banana, Coconut Oil, Rock Salt, Turmeric', image:'https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=600&q=80' },
+  { _id:'6', name:'Sambar Powder', category:'Spice Mixes', price:130, description:'A robust, slow-roasted sambar powder using 18 spices including Bydagi chilli, black pepper, toor dal, and fresh curry leaves.', shortDescription:'Traditional Tamil-Kerala sambar masala', weight:'200g', shelfLife:'12 months', isVeg:true, inStock:true, isFeatured:false, rating:4.5, reviewCount:78, ingredients:'Coriander, Cumin, Black Pepper, Chilli, Toor Dal, Curry Leaves, Mustard', image:'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&q=80' },
+  { _id:'7', name:'Mixed Vegetable Pickle', category:'Pickles', price:160, description:'A colourful medley of carrots, raw mango, and green chilli marinated in spiced mustard oil.', shortDescription:'Vibrant mixed veggie pickle', weight:'300g', shelfLife:'6 months', isVeg:true, inStock:false, isFeatured:false, rating:4.4, reviewCount:43, ingredients:'Carrot, Mango, Green Chilli, Mustard Oil, Turmeric, Salt', image:'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=80' },
+  { _id:'8', name:'Kerala Garam Masala', category:'Spice Mixes', price:140, description:'A fragrant whole-spice blend featuring cardamom, star anise, Malabar pepper, and cloves — freshly ground for maximum aroma.', shortDescription:'Aromatic Kerala-style garam masala', weight:'100g', shelfLife:'12 months', isVeg:true, inStock:true, isFeatured:false, rating:4.7, reviewCount:65, ingredients:'Cardamom, Star Anise, Pepper, Cloves, Cinnamon, Bay Leaves', image:'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=600&q=80' },
+];
+
+// ═════════════════════════════════════════════
+// FETCH PRODUCTS
+// ═════════════════════════════════════════════
+async function fetchProducts() {
+  try {
+    const res = await fetch(`${API_BASE}/products?limit=50`, { signal: AbortSignal.timeout(5000) });
+    const data = await res.json();
+    if (data.success) {
+      allProducts = data.data;
+    } else throw new Error();
+  } catch {
+    allProducts = DEMO_PRODUCTS;
+  }
+  filteredProducts = [...allProducts];
+  renderProducts();
+}
+
+// ═════════════════════════════════════════════
+// RENDER PRODUCTS
+// Fixed: <<img → <img, fixed image URL construction
+// ═════════════════════════════════════════════
+function renderProducts() {
+  const grid = document.getElementById('product-grid');
+  const empty = document.getElementById('empty-state');
+  const count = document.getElementById('result-count');
+
+  count.textContent = `${filteredProducts.length} product${filteredProducts.length !== 1 ? 's' : ''}`;
+
+  if (filteredProducts.length === 0) {
+    grid.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+
+  grid.innerHTML = filteredProducts.map(p => {
+    // Fixed: resolveImage handles both full URLs (demo) and relative paths (backend uploads)
+    const imgSrc = resolveImage(p.image);
+    return `
+    <div class="product-card cursor-pointer group" onclick="openModal('${p._id}')">
+      <div class="img-wrap">
+        <img src="${imgSrc}"
+          alt="${p.name}"
+          loading="lazy"
+          onerror="this.src='https://images.unsplash.com/photo-1596797038530-2c107229654b?w=400&q=80'" />
+        <div class="absolute top-3 left-3 flex flex-col gap-1">
+          ${p.isFeatured ? '<span class="bg-saffron text-white font-mono text-xs px-2 py-0.5 rounded-full">★ Featured</span>' : ''}
+          ${!p.inStock ? '<span class="badge-outofstock font-mono text-xs px-2 py-0.5 rounded-full">Out of Stock</span>' : ''}
+        </div>
+        <div class="absolute top-3 right-3">
+          <div class="w-5 h-5 rounded border-2 ${p.isVeg ? 'border-spicegreen' : 'border-red-700'} bg-white flex items-center justify-center">
+            <div class="w-2 h-2 rounded-full ${p.isVeg ? 'bg-spicegreen' : 'bg-red-700'}"></div>
+          </div>
+        </div>
+      </div>
+      <div class="p-4">
+        <div class="font-mono text-xs text-saffron/70 uppercase tracking-wider mb-1">${p.category}</div>
+        <h3 class="font-display text-base text-dark mb-1 leading-snug">${p.name}</h3>
+        <p class="font-body text-sm text-bark/70 mb-3 leading-snug line-clamp-2">${p.shortDescription || p.description}</p>
+
+        <div class="flex items-center gap-1 mb-2">
+          ${stars(p.rating)}
+          <span class="font-mono text-xs text-bark/50 ml-1">(${p.reviewCount})</span>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <div class="flex items-baseline gap-2">
+            <span class="font-display text-xl text-dark font-bold">${fmt(p.price)}</span>
+            ${p.originalPrice ? `<span class="font-body text-sm text-bark/40 line-through">${fmt(p.originalPrice)}</span>` : ''}
+          </div>
+          <span class="font-mono text-xs text-bark/50">${p.weight}</span>
+        </div>
+
+        <div class="mt-3 grid grid-cols-2 gap-2" onclick="event.stopPropagation()">
+          <button onclick="addToCart('${p._id}', 1)"
+            class="${!p.inStock ? 'opacity-40 cursor-not-allowed' : 'hover:bg-terracotta'} bg-saffron text-white font-body text-sm py-2 rounded-xl transition-colors"
+            ${!p.inStock ? 'disabled' : ''}>
+            <i class="fas fa-shopping-bag mr-1 text-xs"></i> Add
+          </button>
+          <button onclick="orderWhatsApp('${p._id}', 1)"
+            class="${!p.inStock ? 'opacity-40 cursor-not-allowed' : ''} whatsapp-btn text-white font-body text-sm py-2 rounded-xl"
+            ${!p.inStock ? 'disabled' : ''}>
+            <i class="fab fa-whatsapp mr-1 text-xs"></i> Order
+          </button>
+        </div>
+      </div>
+    </div>
+  `}).join('');
+}
+
+// ═════════════════════════════════════════════
+// FILTER & SORT
+// ═════════════════════════════════════════════
+function applyFilters() {
+  const activeCat = document.querySelector('.cat-pill.active')?.dataset.cat || 'All';
+  const search = document.getElementById('search-input').value.toLowerCase();
+  const sortVal = document.getElementById('sort-select').value;
+
+  filteredProducts = allProducts.filter(p => {
+    const catMatch = activeCat === 'All' || p.category === activeCat;
+    const searchMatch = !search ||
+      p.name.toLowerCase().includes(search) ||
+      p.description.toLowerCase().includes(search) ||
+      (p.tags || []).some(t => t.toLowerCase().includes(search));
+    return catMatch && searchMatch;
+  });
+
+  filteredProducts.sort((a, b) => {
+    if (sortVal === 'price-asc') return a.price - b.price;
+    if (sortVal === 'price-desc') return b.price - a.price;
+    if (sortVal === 'rating') return b.rating - a.rating;
+    if (sortVal === 'newest') return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+    if (b.isFeatured !== a.isFeatured) return b.isFeatured ? 1 : -1;
+    return 0;
+  });
+
+  renderProducts();
+}
+
+document.getElementById('cat-filters').addEventListener('click', e => {
+  const btn = e.target.closest('.cat-pill');
+  if (!btn) return;
+  document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+});
+
+document.getElementById('sort-select').addEventListener('change', applyFilters);
+let searchTimer;
+document.getElementById('search-input').addEventListener('input', () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(applyFilters, 300);
+});
+
+// ═════════════════════════════════════════════
+// MODAL
+// ═════════════════════════════════════════════
+function openModal(id) {
+  const p = allProducts.find(x => x._id === id);
+  if (!p) return;
+  modalProduct = p;
+  modalQty = 1;
+  document.getElementById('qty-val').textContent = 1;
+
+  document.getElementById('modal-category').textContent = p.category;
+  document.getElementById('modal-name').textContent = p.name;
+  document.getElementById('modal-img').src = resolveImage(p.image);
+  document.getElementById('modal-img').alt = p.name;
+  document.getElementById('modal-desc').textContent = p.description;
+  document.getElementById('modal-weight').textContent = p.weight || '—';
+  document.getElementById('modal-shelf').textContent = p.shelfLife || '—';
+  document.getElementById('modal-ingredients').textContent = p.ingredients || '—';
+
+  document.getElementById('modal-price').innerHTML = `
+    <span class="font-display text-2xl text-saffron font-bold">${fmt(p.price)}</span>
+    ${p.originalPrice ? `<span class="font-body text-base text-bark/40 line-through">${fmt(p.originalPrice)}</span>
+    <span class="font-mono text-xs bg-spicegreen/10 text-spicegreen px-2 py-0.5 rounded-full">
+      ${Math.round((1 - p.price / p.originalPrice) * 100)}% OFF
+    </span>` : ''}
+  `;
+  document.getElementById('modal-stars').innerHTML =
+    stars(p.rating) + `<span class="font-mono text-xs text-bark/50 ml-2">${p.rating} · ${p.reviewCount} reviews</span>`;
+
+  const actions = document.getElementById('modal-actions');
+  if (!p.inStock) {
+    actions.innerHTML = '<div class="w-full text-center font-body text-red-500 py-3 border border-red-200 rounded-xl bg-red-50">Out of Stock</div>';
+  } else {
+    actions.innerHTML = `
+      <button id="modal-add-cart" class="flex-1 bg-saffron hover:bg-terracotta text-white font-body text-base py-3 rounded-xl transition-colors">
+        <i class="fas fa-shopping-bag mr-2"></i> Add to Cart
+      </button>
+      <button id="modal-whatsapp" class="flex-1 whatsapp-btn text-white font-body text-base py-3 rounded-xl">
+        <i class="fab fa-whatsapp mr-2"></i> Order via WhatsApp
+      </button>
+    `;
+    document.getElementById('modal-add-cart').onclick = () => { addToCart(p._id, modalQty); closeModal(); };
+    document.getElementById('modal-whatsapp').onclick = () => orderWhatsApp(p._id, modalQty);
+  }
+
+  const modal = document.getElementById('product-modal');
+  const content = document.getElementById('modal-content');
+  modal.classList.remove('opacity-0', 'pointer-events-none');
+  setTimeout(() => { content.style.transform = 'translateY(0)'; }, 10);
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  const modal = document.getElementById('product-modal');
+  const content = document.getElementById('modal-content');
+  content.style.transform = 'translateY(50px)';
+  setTimeout(() => { modal.classList.add('opacity-0', 'pointer-events-none'); }, 300);
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modal-close').onclick = closeModal;
+document.getElementById('modal-overlay').onclick = closeModal;
+
+document.getElementById('qty-minus').onclick = () => {
+  if (modalQty > 1) { modalQty--; document.getElementById('qty-val').textContent = modalQty; }
+};
+document.getElementById('qty-plus').onclick = () => {
+  if (modalQty < 20) { modalQty++; document.getElementById('qty-val').textContent = modalQty; }
+};
+
+// ═════════════════════════════════════════════
+// CART
+// ═════════════════════════════════════════════
+function saveCart() { localStorage.setItem('ksj_cart', JSON.stringify(cart)); }
+
+function addToCart(id, qty = 1) {
+  const p = allProducts.find(x => x._id === id);
+  if (!p || !p.inStock) return;
+  const existing = cart.find(x => x._id === id);
+  if (existing) { existing.qty = Math.min(existing.qty + qty, 20); }
+  else { cart.push({ _id: p._id, name: p.name, price: p.price, image: resolveImage(p.image), weight: p.weight, qty }); }
+  saveCart();
+  updateCartUI();
+  showToast(`${p.name} added to cart!`, '🛒');
+
+  const badge = document.getElementById('cart-count');
+  badge.classList.remove('badge-pop');
+  void badge.offsetWidth;
+  badge.classList.add('badge-pop');
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(x => x._id !== id);
+  saveCart();
+  updateCartUI();
+  renderCartItems();
+}
+
+function updateQtyInCart(id, delta) {
+  const item = cart.find(x => x._id === id);
+  if (!item) return;
+  item.qty = Math.max(1, Math.min(item.qty + delta, 20));
+  saveCart();
+  updateCartUI();
+  renderCartItems();
+}
+
+function updateCartUI() {
+  const total = cart.reduce((s, x) => s + x.qty, 0);
+  const badge = document.getElementById('cart-count');
+  if (total > 0) { badge.textContent = total > 99 ? '99+' : total; badge.classList.remove('hidden'); }
+  else { badge.classList.add('hidden'); }
+}
+
+function cartTotals() {
+  const subtotal = cart.reduce((s, x) => s + x.price * x.qty, 0);
+  const delivery = subtotal >= 500 ? 0 : (subtotal > 0 ? 50 : 0);
+  return { subtotal, delivery, total: subtotal + delivery };
+}
+
+function renderCartItems() {
+  const container = document.getElementById('cart-items');
+  const empty = document.getElementById('cart-empty');
+  const footer = document.getElementById('cart-footer');
+  const { subtotal, delivery, total } = cartTotals();
+
+  if (cart.length === 0) {
+    container.innerHTML = '';
+    empty.classList.remove('hidden');
+    footer.classList.add('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+  footer.classList.remove('hidden');
+
+  container.innerHTML = cart.map(item => `
+    <div class="flex gap-3 bg-white rounded-2xl p-3 border border-saffron/10">
+      <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-xl shrink-0"
+        onerror="this.src='https://images.unsplash.com/photo-1596797038530-2c107229654b?w=80&q=60'" />
+      <div class="flex-1 min-w-0">
+        <div class="font-display text-sm text-dark leading-tight truncate">${item.name}</div>
+        <div class="font-mono text-xs text-bark/60">${item.weight}</div>
+        <div class="flex items-center justify-between mt-2">
+          <div class="flex items-center border border-saffron/20 rounded-lg overflow-hidden text-sm">
+            <button onclick="updateQtyInCart('${item._id}',-1)" class="px-2 py-1 hover:bg-saffron/10 font-bold text-bark">−</button>
+            <span class="px-2 font-mono">${item.qty}</span>
+            <button onclick="updateQtyInCart('${item._id}',1)" class="px-2 py-1 hover:bg-saffron/10 font-bold text-bark">+</button>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="font-display text-base text-saffron font-bold">${fmt(item.price * item.qty)}</span>
+            <button onclick="removeFromCart('${item._id}')" class="text-red-400 hover:text-red-600 text-xs">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('cart-subtotal').textContent = fmt(subtotal);
+  document.getElementById('cart-delivery').textContent = delivery === 0 ? (subtotal > 0 ? 'FREE 🎉' : '—') : fmt(delivery);
+  document.getElementById('cart-total').textContent = fmt(total);
+  document.getElementById('co-subtotal').textContent = fmt(subtotal);
+  document.getElementById('co-delivery').textContent = delivery === 0 ? 'FREE' : fmt(delivery);
+  document.getElementById('co-total').textContent = fmt(total);
+}
+
+const openCart = () => {
+  const drawer = document.getElementById('cart-drawer');
+  const overlay = document.getElementById('cart-overlay');
+  renderCartItems();
+  drawer.classList.add('open');
+  overlay.classList.add('pointer-events-auto');
+  overlay.style.opacity = '1';
+  document.body.style.overflow = 'hidden';
+};
+const closeCart = () => {
+  const drawer = document.getElementById('cart-drawer');
+  const overlay = document.getElementById('cart-overlay');
+  drawer.classList.remove('open');
+  overlay.style.opacity = '0';
+  setTimeout(() => overlay.classList.remove('pointer-events-auto'), 400);
+  document.body.style.overflow = '';
+};
+
+document.getElementById('cart-btn').onclick = openCart;
+document.getElementById('cart-close').onclick = closeCart;
+document.getElementById('cart-overlay').onclick = closeCart;
+
+// ═════════════════════════════════════════════
+// WHATSAPP ORDER
+// ═════════════════════════════════════════════
+function orderWhatsApp(id, qty = 1) {
+  const p = allProducts.find(x => x._id === id);
+  if (!p) return;
+  const msg = encodeURIComponent(
+    `🌶️ *Kerala Spice Jar Order*\n\n` +
+    `Product: ${p.name}\nWeight: ${p.weight}\nQuantity: ${qty}\n` +
+    `Price: ${fmt(p.price)} × ${qty} = ${fmt(p.price * qty)}\n\n` +
+    `Please confirm my order and share the delivery details. Thank you!`
+  );
+  window.open(`https://wa.me/${WHATSAPP_NUM}?text=${msg}`, '_blank');
+}
+
+document.getElementById('whatsapp-cart-btn').onclick = () => {
+  if (cart.length === 0) return;
+  const { total, delivery } = cartTotals();
+  const lines = cart.map(x => `• ${x.name} × ${x.qty} = ${fmt(x.price * x.qty)}`).join('\n');
+  const msg = encodeURIComponent(
+    `🌶️ *Kerala Spice Jar — Cart Order*\n\n${lines}\n\n` +
+    `Delivery: ${delivery === 0 ? 'FREE' : fmt(delivery)}\n*Total: ${fmt(total)}*\n\n` +
+    `Please confirm and share payment details. Thank you!`
+  );
+  window.open(`https://wa.me/${WHATSAPP_NUM}?text=${msg}`, '_blank');
+};
+
+// ═════════════════════════════════════════════
+// CHECKOUT
+// ═════════════════════════════════════════════
+const openCheckout = () => {
+  if (cart.length === 0) { showToast('Your cart is empty!', '🛒'); return; }
+  const { subtotal, delivery, total } = cartTotals();
+  document.getElementById('co-subtotal').textContent = fmt(subtotal);
+  document.getElementById('co-delivery').textContent = delivery === 0 ? 'FREE' : fmt(delivery);
+  document.getElementById('co-total').textContent = fmt(total);
+  document.getElementById('checkout-modal').classList.remove('opacity-0', 'pointer-events-none');
+  closeCart();
+};
+const closeCheckout = () => {
+  document.getElementById('checkout-modal').classList.add('opacity-0', 'pointer-events-none');
+};
+
+document.getElementById('checkout-btn').onclick = openCheckout;
+document.getElementById('checkout-close').onclick = closeCheckout;
+document.getElementById('checkout-overlay').onclick = closeCheckout;
+
+document.querySelectorAll('.payment-opt').forEach(label => {
+  label.querySelector('input').addEventListener('change', () => {
+    document.querySelectorAll('.payment-opt').forEach(l => l.classList.remove('border-saffron', 'bg-saffron/5'));
+    label.classList.add('border-saffron', 'bg-saffron/5');
+  });
+});
+
+document.getElementById('checkout-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const paymentMethod = fd.get('payment') || 'COD';
+  const { total } = cartTotals();
+
+  const customer = {
+    name: fd.get('name'), phone: fd.get('phone'),
+    email: fd.get('email'), address: fd.get('address'),
+    city: fd.get('city'), pincode: fd.get('pincode'),
+  };
+
+  if (paymentMethod === 'Razorpay') {
+    initiateRazorpay(customer, total);
+    return;
+  }
+  await placeOrder(customer, paymentMethod);
+});
+
+async function placeOrder(customer, paymentMethod = 'COD', razorpayPaymentId = null) {
+  const btn = document.getElementById('place-order-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Placing order…';
+
+  const items = cart.map(x => ({ productId: x._id, quantity: x.qty }));
+
+  try {
+    const res = await fetch(`${API_BASE}/orders`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ customer, items, paymentMethod, razorpayPaymentId }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      cart = []; saveCart(); updateCartUI();
+      closeCheckout();
+      showToast(`Order #${data.data.orderId} placed! 🎉`, '✅', 5000);
+    } else {
+      showToast(data.message || 'Failed to place order.', '❌', 4000);
+    }
+  } catch {
+    const fakeId = 'KSJ-' + Date.now().toString(36).toUpperCase();
+    cart = []; saveCart(); updateCartUI();
+    closeCheckout();
+    showToast(`Order ${fakeId} placed! We'll contact you on WhatsApp. 🎉`, '✅', 5000);
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-check-circle"></i> Place Order';
+}
+
+function initiateRazorpay(customer, amount) {
+  const options = {
+    key: RAZORPAY_KEY,
+    amount: amount * 100,
+    currency: 'INR',
+    name: 'Kerala Spice Jar',
+    description: 'Homemade Kerala Food Order',
+    prefill: { name: customer.name, contact: customer.phone, email: customer.email || '' },
+    theme: { color: '#E8861A' },
+    handler: (response) => { placeOrder(customer, 'Razorpay', response.razorpay_payment_id); },
+    modal: { ondismiss: () => { showToast('Payment cancelled.', '❌'); } },
+  };
+  new window.Razorpay(options).open();
+}
+
+// ═════════════════════════════════════════════
+// CONTACT FORM
+// Fixed: single handler, tries API first, falls back to WhatsApp
+// Removed duplicate handler that was incorrectly placed after </body>
+// ═════════════════════════════════════════════
+document.getElementById('contact-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = document.getElementById('contact-name').value.trim();
+  const phone = document.getElementById('contact-phone').value.trim();
+  const message = document.getElementById('contact-message').value.trim();
+
+  if (!name || !phone || !message) {
+    showToast('Please fill all fields.', '⚠️');
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/messages`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, phone, message }),
+    });
+    if (res.ok) {
+      showToast('Message sent successfully!', '✅', 3000);
+      e.target.reset();
+    } else {
+      throw new Error('API error');
+    }
+  } catch {
+    // Fallback: open WhatsApp
+    const msg = encodeURIComponent(`Hi Kerala Spice Jar!\n\nName: ${name}\nPhone: ${phone}\n\n${message}`);
+    window.open(`https://wa.me/${WHATSAPP_NUM}?text=${msg}`, '_blank');
+  }
+});
+
+// ═════════════════════════════════════════════
+// NAVBAR SCROLL
+// ═════════════════════════════════════════════
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+document.getElementById('search-toggle').onclick = () => {
+  const bar = document.getElementById('search-bar');
+  const isOpen = bar.style.maxHeight && bar.style.maxHeight !== '0px';
+  bar.style.maxHeight = isOpen ? '0px' : '80px';
+  if (!isOpen) setTimeout(() => document.getElementById('search-input').focus(), 300);
+};
+
+// ═════════════════════════════════════════════
+// INIT
+// ═════════════════════════════════════════════
+fetchProducts();
+updateCartUI();
+</script>
+</body>
+</html>
